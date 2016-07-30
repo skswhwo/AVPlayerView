@@ -1,0 +1,26 @@
+# MAC OS X Folder Attributes
+# File stores finder interface state
+.DS_Store
+
+# XCODE 3 FILES
+# In case someone uses xcode 3 to work with project
+[Bb]uild
+[Bb]uild/**/*
+*.mode[12]v3
+!default.mode[12]v3
+*.pbxuser
+!default.pbxuser
+*.perspectivev3
+!default.perspectivev3
+
+# XCODE 4 FILES
+# this folder is important because it ignores user schemes and user interface
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+*.xcuserdatad
+
+# Ignore Podsfile
+/Podfile
+Podfile.lock
+/Pods
