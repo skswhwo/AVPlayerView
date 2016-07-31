@@ -5,7 +5,7 @@ AVPlayer module that implemented by subclass of UIView class
 - Support autoplay, loop mode
 - Easy to use 
 
-![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample1.gif "demo")
+![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample1.mp4 "demo")
 
 ## Installation
 
