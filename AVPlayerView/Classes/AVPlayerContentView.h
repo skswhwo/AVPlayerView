@@ -24,7 +24,6 @@
 
 - (void)playerWithPlayerItem:(AVPlayerItem *)playerItem time:(CMTime)startTime;
 
-- (void)playVideoAfterTimeinterval:(NSTimeInterval)timeinterval;
 - (void)playVideo;
 - (void)pauseVideo;
 

@@ -11,10 +11,13 @@
 
 @interface AVPlayerView ()
 {
+    BOOL didAppearFlag;
+    
     UIWindowLevel previousWindowLevel;
 }
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
 @property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, assign) BOOL isFullSize;
 
 @end
 
@@ -22,12 +25,8 @@
 @implementation AVPlayerView
 - (void)initialize
 {
-    previousWindowLevel = [[UIApplication sharedApplication] keyWindow].windowLevel;
-
-    self.backgroundColor = [UIColor clearColor];
-    
+    [self initializeProperties];
     [self initializePlayer];
-    
     [self normalSizeMode];
 }
 
@@ -45,7 +44,16 @@
     return self;
 }
 
-#pragma mark - Initialize Player
+#pragma mark - Initialize
+- (void)initializeProperties
+{
+    self.backgroundColor    = [UIColor clearColor];
+    previousWindowLevel     = [[UIApplication sharedApplication] keyWindow].windowLevel;
+    self.dimmedEffect       = true;
+    self.pauseWhenDisappear = true;
+    self.playWhenAppear     = true;
+    self.backgroundColorForFullSize = [UIColor blackColor];
+}
 - (void)initializePlayer
 {
     _playerContentView = [[AVPlayerContentView alloc] init];
@@ -70,13 +78,21 @@
 }
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    if (self.autoplay) {
+    if (self.didAppear) {
+        self.didAppear(self);
+    }
+    if (self.playWhenAppear) {
         [self.playerContentView playVideo];
     }
 }
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
-    [self.playerContentView pauseVideo];
+    if (self.didDisappear) {
+        self.didDisappear(self);
+    }
+    if (self.pauseWhenDisappear) {
+        [self.playerContentView pauseVideo];
+    }
 }
 
 #pragma mark - Trigger
@@ -94,7 +110,7 @@
 }
 
 #pragma mark - Setter
-- (void)setTapCallBack:(AVPlayerViewTapCallback)tapCallBack
+- (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack
 {
     _tapCallBack = tapCallBack;
     
@@ -102,6 +118,14 @@
         _tapGesture  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTapped:)];
         [self.playerContentView addGestureRecognizer:_tapGesture];
     }
+}
+- (void)setDidAppear:(AVPlayerViewCallback)didAppear
+{
+    _didAppear = didAppear;
+}
+- (void)setDidDisappear:(AVPlayerViewCallback)didDisappear
+{
+    _didDisappear = didDisappear;
 }
 - (void)setLoop:(BOOL)loop
 {
@@ -118,6 +142,40 @@
     }
 }
 
+#pragma mark - View Callback
+- (void)didMoveToWindow
+{
+    if (self.window)
+    {
+        didAppearFlag = true;
+        [self registerNotification];
+        [self performSelector:@selector(afterDidMoveToWindow) withObject:nil afterDelay:0.5];
+    }
+    else
+    {
+        didAppearFlag = false;
+        [self unregisterNotification];
+        if (self.didDisappear) {
+            self.didDisappear(self);
+        }
+        if (self.pauseWhenDisappear) {
+            [self.playerContentView pauseVideo];
+        }
+    }
+}
+
+- (void)afterDidMoveToWindow
+{
+    if (didAppearFlag) {
+        if (self.didAppear) {
+            self.didAppear(self);
+        }
+        if (self.autoplay && self.playWhenAppear) {
+            [self.playerContentView playVideo];
+        }
+    }
+}
+
 #pragma mark - IBAction
 - (IBAction)playButtonClicked
 {
@@ -129,24 +187,15 @@
     [self.playerContentView pauseVideo];
 }
 
-- (void)didMoveToWindow
+#pragma mark - Action
+- (void)play
 {
-    if (self.window)
-    {
-        [self registerNotification];
-        if (self.autoplay) {
-            //Prevent to be played when new VC is pushed, because didMoveToWindow is called multiple...
-            [self.playerContentView playVideoAfterTimeinterval:0.5];
-        }
-    }
-    else
-    {
-        [self unregisterNotification];
-        [self.playerContentView pauseVideo];
-    }
+    [self.playerContentView playVideo];
 }
-
-#pragma mark - Mode
+- (void)pause
+{
+    [self.playerContentView pauseVideo];
+}
 - (void)normalSizeMode
 {
     self.isFullSize = NO;
@@ -172,6 +221,9 @@
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.frame = rect;
     [window addSubview:self.playerContentView];
+    if (self.dimmedEffect == false) {
+        self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
+    }
     
     [UIView animateWithDuration:0.3 animations:^{
         
@@ -179,7 +231,7 @@
         self.playerContentView.center = window.center;
         
         if (self.dimmedEffect) {
-            self.playerContentView.backgroundColor = [UIColor blackColor];
+            self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
         }
         
     } completion:^(BOOL finished) {

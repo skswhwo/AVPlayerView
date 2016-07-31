@@ -27,11 +27,17 @@
     [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
     [self valueChanged:nil];
     [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
-        if (playerView.isFullSize) {
+        if ([playerView isFullSize]) {
             [playerView normalSizeMode];
         } else {
             [playerView fullSizeMode];
         } ;
+    }];
+    [self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+        //do something;
+    }];
+    [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+        //do something;
     }];
 }
 

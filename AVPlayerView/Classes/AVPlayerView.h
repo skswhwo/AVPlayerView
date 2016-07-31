@@ -11,20 +11,33 @@
 
 @class AVPlayerView;
 
-typedef void (^AVPlayerViewTapCallback) (AVPlayerView *playerView);
+typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 
 @interface AVPlayerView : UIView
 
 @property (nonatomic, assign) BOOL loop;
 @property (nonatomic, assign) BOOL autoplay;
 @property (nonatomic, assign) BOOL dimmedEffect;
-@property (nonatomic, strong) AVPlayerViewTapCallback tapCallBack;
+@property (nonatomic, assign) BOOL pauseWhenDisappear;  //default: true
+@property (nonatomic, assign) BOOL playWhenAppear;      //default: true (require autoplay)
 
-@property (nonatomic, assign) BOOL isFullSize;
+@property (nonatomic, strong) UIColor *backgroundColorForFullSize; //default: black
+
+@property (nonatomic, strong) AVPlayerViewCallback tapCallBack;
+@property (nonatomic, strong) AVPlayerViewCallback didAppear;
+@property (nonatomic, strong) AVPlayerViewCallback didDisappear;
 
 - (void)playerWithContentURL:(NSURL *)url;
-- (void)setTapCallBack:(AVPlayerViewTapCallback)tapCallBack;
+- (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack;
+- (void)setDidAppear:(AVPlayerViewCallback)didAppear;
+- (void)setDidDisappear:(AVPlayerViewCallback)didDisappear;
 
+#pragma mark - Condition
+- (BOOL)isFullSize;
+
+#pragma mark - Interface
+- (void)play;
+- (void)pause;
 - (void)normalSizeMode;
 - (void)fullSizeMode;
 

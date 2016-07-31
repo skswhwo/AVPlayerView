@@ -10,9 +10,7 @@
 
 @interface AVPlayerContentView ()
 {
-    BOOL needToPlay;
     BOOL isFinished;
-
     NSInteger loopCount;
 }
 @end
@@ -59,30 +57,17 @@
 }
 
 #pragma mark - Action
-- (void)playVideoAfterTimeinterval:(NSTimeInterval)timeinterval
-{
-    needToPlay = YES;
-    [self performSelector:@selector(playVideoIfNeeded) withObject:nil afterDelay:timeinterval];
-}
-- (void)playVideoIfNeeded
-{
-    if (needToPlay) {
-        needToPlay = NO;
-        [self playVideo];
-    }
-}
 - (void)playVideo
 {
     if (isFinished) {
-        [self.avPlayer seekToTime:kCMTimeZero];
         isFinished = NO;
+        [self.avPlayer seekToTime:kCMTimeZero];
     }
     [self.avPlayer play];
 }
 
 - (void)pauseVideo
 {
-    needToPlay = NO;
     if ([self isPlaying]) {
         [self.avPlayer pause];
     }

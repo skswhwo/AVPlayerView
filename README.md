@@ -29,13 +29,25 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
 [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
 self.avPlayerView.autoplay      = YES;
 self.avPlayerView.loop          = YES;
-self.avPlayerView.dimmedEffect  = YES;
+self.avPlayerView.dimmedEffect  = YES;                  //default: true
+self.pauseWhenDisappear         = YES;                  //default: true
+self.playWhenAppear             = YES;                  //default: true (require autoplay)
+self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
+
 [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
     if (playerView.isFullSize) {
         [playerView normalSizeMode];
     } else {
         [playerView fullSizeMode];
     } ;
+}];
+
+[self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+    //do somthing;
+}];
+
+[self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+    //do somthing;
 }];
 
 ```
