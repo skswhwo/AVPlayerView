@@ -10,7 +10,9 @@
 #import "AVPlayerContentView.h"
 
 @interface AVPlayerView ()
-
+{
+    UIWindowLevel previousWindowLevel;
+}
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
 @property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 
@@ -20,6 +22,8 @@
 @implementation AVPlayerView
 - (void)initialize{
     
+    previousWindowLevel = [[UIApplication sharedApplication] keyWindow].windowLevel;
+
     self.backgroundColor = [UIColor clearColor];
     
     [self registerPlayer];
@@ -104,7 +108,9 @@
     self.isFullSize = NO;
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    window.windowLevel = previousWindowLevel;
     CGRect rect = [self.superview convertRect:self.frame toView:window];
+    
     [UIView animateWithDuration:0.3 animations:^{
         self.playerContentView.frame = rect;
         self.playerContentView.backgroundColor = [UIColor clearColor];
@@ -118,6 +124,7 @@
     self.isFullSize = YES;
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    window.windowLevel = UIWindowLevelStatusBar;
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.frame = rect;
     [window addSubview:self.playerContentView];
