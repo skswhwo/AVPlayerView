@@ -9,17 +9,24 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
-typedef void (^AVPlayerViewTapCallback) (AVPlayer *player);
+@class AVPlayerView;
+
+typedef void (^AVPlayerViewTapCallback) (AVPlayerView *playerView);
 
 @interface AVPlayerView : UIView
 
 @property (nonatomic, assign) BOOL loop;
 @property (nonatomic, assign) BOOL autoplay;
+@property (nonatomic, assign) BOOL dimmedEffect;
 @property (nonatomic, strong) AVPlayerViewTapCallback tapCallBack;
 
-@property (nonatomic, assign) BOOL dimmedEffect;
+@property (nonatomic, assign) BOOL isFullSize;
 
 - (void)playerWithContentURL:(NSURL *)url;
+- (void)setTapCallBack:(AVPlayerViewTapCallback)tapCallBack;
+
+- (void)normalSizeMode;
+- (void)fullSizeMode;
 
 @end
 

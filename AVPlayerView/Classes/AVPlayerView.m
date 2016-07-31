@@ -13,7 +13,6 @@
 
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
 @property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
-@property (nonatomic, assign) BOOL isFullSize;
 
 @end
 
@@ -24,7 +23,6 @@
     self.backgroundColor = [UIColor clearColor];
     
     [self registerPlayer];
-    [self registerTapGesture];
     
     [self normalSizeMode];
 }
@@ -50,12 +48,6 @@
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
 }
 
-- (void)registerTapGesture
-{
-    _tapGesture  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTapped:)];
-    [self.playerContentView addGestureRecognizer:_tapGesture];
-}
-
 #pragma mark - Trigger
 - (void)playerWithContentURL:(NSURL *)url
 {
@@ -65,14 +57,21 @@
 #pragma mark - UIGestureRecognizer Callback
 - (void)playerTapped:(UIGestureRecognizer *)gesture
 {
-    if (self.isFullSize) {
-        [self normalSizeMode];
-    } else {
-        [self fullSizeMode];
+    if (self.tapCallBack) {
+        self.tapCallBack(self);
     }
 }
 
 #pragma mark - Setter
+- (void)setTapCallBack:(AVPlayerViewTapCallback)tapCallBack
+{
+    _tapCallBack = tapCallBack;
+    
+    if (_tapGesture == nil) {
+        _tapGesture  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTapped:)];
+        [self.playerContentView addGestureRecognizer:_tapGesture];
+    }
+}
 - (void)setLoop:(BOOL)loop
 {
     _loop = loop;
