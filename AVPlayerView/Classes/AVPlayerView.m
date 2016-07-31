@@ -218,17 +218,20 @@
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = UIWindowLevelStatusBar;
+    [window addSubview:self.playerContentView];
+    [window layoutIfNeeded];
+
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.frame = rect;
-    [window addSubview:self.playerContentView];
+    CGRect targetRect = window.bounds;
+    
     if (self.dimmedEffect == false) {
         self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
     }
     
     [UIView animateWithDuration:0.3 animations:^{
         
-        self.playerContentView.frame = window.bounds;
-        self.playerContentView.center = window.center;
+        self.playerContentView.frame = targetRect;
         
         if (self.dimmedEffect) {
             self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
