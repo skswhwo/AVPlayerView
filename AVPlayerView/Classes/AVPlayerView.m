@@ -20,13 +20,13 @@
 
 
 @implementation AVPlayerView
-- (void)initialize{
-    
+- (void)initialize
+{
     previousWindowLevel = [[UIApplication sharedApplication] keyWindow].windowLevel;
 
     self.backgroundColor = [UIColor clearColor];
     
-    [self registerPlayer];
+    [self initializePlayer];
     
     [self normalSizeMode];
 }
@@ -45,11 +45,38 @@
     return self;
 }
 
-#pragma mark - Register
-- (void)registerPlayer
+#pragma mark - Initialize Player
+- (void)initializePlayer
 {
     _playerContentView = [[AVPlayerContentView alloc] init];
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+}
+
+#pragma mark - Notifiation
+- (void)registerNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
+- (void)unregisterNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    if (self.autoplay) {
+        [self.playerContentView playVideo];
+    }
+}
+- (void)applicationDidEnterBackground:(NSNotification *)notification
+{
+    [self.playerContentView pauseVideo];
 }
 
 #pragma mark - Trigger
@@ -100,6 +127,23 @@
 - (IBAction)pauseButtonClicked
 {
     [self.playerContentView pauseVideo];
+}
+
+- (void)didMoveToWindow
+{
+    if (self.window)
+    {
+        [self registerNotification];
+        if (self.autoplay) {
+            //Prevent to be played when new VC is pushed, because didMoveToWindow is called multiple...
+            [self.playerContentView playVideoAfterTimeinterval:0.5];
+        }
+    }
+    else
+    {
+        [self unregisterNotification];
+        [self.playerContentView pauseVideo];
+    }
 }
 
 #pragma mark - Mode

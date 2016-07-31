@@ -10,6 +10,9 @@
 
 @interface AVPlayerContentView ()
 {
+    BOOL needToPlay;
+    BOOL isFinished;
+
     NSInteger loopCount;
 }
 @end
@@ -46,6 +49,7 @@
 #pragma mark - Observer
 - (void)playerFinishedPlaying:(NSNotification *)notification
 {
+    isFinished = YES;
     if (self.loop) {
         loopCount++;
         if (self.MAX_LOOP_COUNT > loopCount) {
@@ -55,22 +59,39 @@
 }
 
 #pragma mark - Action
+- (void)playVideoAfterTimeinterval:(NSTimeInterval)timeinterval
+{
+    needToPlay = YES;
+    [self performSelector:@selector(playVideoIfNeeded) withObject:nil afterDelay:timeinterval];
+}
+- (void)playVideoIfNeeded
+{
+    if (needToPlay) {
+        needToPlay = NO;
+        [self playVideo];
+    }
+}
 - (void)playVideo
 {
-    if ([self isFinished]) {
+    if (isFinished) {
         [self.avPlayer seekToTime:kCMTimeZero];
+        isFinished = NO;
     }
     [self.avPlayer play];
 }
 
 - (void)pauseVideo
 {
-    [self.avPlayer pause];
+    needToPlay = NO;
+    if ([self isPlaying]) {
+        [self.avPlayer pause];
+    }
 }
 
 #pragma mark - Private
-- (BOOL)isFinished
+- (BOOL)isPlaying
 {
-    return (self.avPlayer.currentTime.value == self.avPlayer.currentItem.duration.value);
+    return (self.avPlayer.rate != 0 && self.avPlayer.error == nil);
 }
+
 @end
