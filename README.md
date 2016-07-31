@@ -27,9 +27,9 @@ $ pod install
 ```objective-c
 NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
 [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
-self.avPlayerView.autoplay      = self.autoplaySwitch.on;
-self.avPlayerView.loop          = self.loopSwitch.on;
-self.avPlayerView.dimmedEffect  = self.dimmedEffectSwitch.on;
+self.avPlayerView.autoplay      = YES;
+self.avPlayerView.loop          = YES;
+self.avPlayerView.dimmedEffect  = YES;
 [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
     if (playerView.isFullSize) {
         [playerView normalSizeMode];
