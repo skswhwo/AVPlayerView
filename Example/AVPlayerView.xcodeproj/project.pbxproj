@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22E3E211D4F518A00069665 /* Test2ViewController.m */; };
+		E24E92921D4F0A33002282E9 /* AVPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E92911D4F0A33002282E9 /* AVPlayerControlView.m */; };
+		E24E92951D4F0A9B002282E9 /* AVPlayerControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E24E92941D4F0A9B002282E9 /* AVPlayerControlView.xib */; };
 		E27477121D4C633E0080C52C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E27477111D4C633E0080C52C /* main.m */; };
 		E27477151D4C633E0080C52C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E27477141D4C633E0080C52C /* AppDelegate.m */; };
 		E27477181D4C633E0080C52C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E27477171D4C633E0080C52C /* ViewController.m */; };
@@ -24,6 +27,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E22E3E201D4F518A00069665 /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
+		E22E3E211D4F518A00069665 /* Test2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test2ViewController.m; sourceTree = "<group>"; };
+		E22E3E231D4F5AF900069665 /* AVPlayerViewEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerViewEnum.h; path = ../AVPlayerView/Classes/AVPlayerViewEnum.h; sourceTree = "<group>"; };
+		E24E92901D4F0A33002282E9 /* AVPlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerControlView.h; path = ../AVPlayerView/Classes/AVPlayerControlView.h; sourceTree = "<group>"; };
+		E24E92911D4F0A33002282E9 /* AVPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVPlayerControlView.m; path = ../AVPlayerView/Classes/AVPlayerControlView.m; sourceTree = "<group>"; };
+		E24E92941D4F0A9B002282E9 /* AVPlayerControlView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AVPlayerControlView.xib; path = ../AVPlayerView/Assets/AVPlayerControlView.xib; sourceTree = "<group>"; };
 		E274770D1D4C633E0080C52C /* AVPlayerView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVPlayerView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27477111D4C633E0080C52C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E27477131D4C633E0080C52C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -31,7 +40,7 @@
 		E27477161D4C633E0080C52C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		E27477171D4C633E0080C52C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E274771A1D4C633E0080C52C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E274771C1D4C633E0080C52C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E274771C1D4C633E0080C52C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../AVPlayerView/Assets/Assets.xcassets; sourceTree = "<group>"; };
 		E274771F1D4C633E0080C52C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E27477211D4C633E0080C52C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E27477291D4C64B30080C52C /* AVPlayerView.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AVPlayerView.podspec; path = ../AVPlayerView.podspec; sourceTree = "<group>"; };
@@ -58,10 +67,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E24E92931D4F0A45002282E9 /* Asset */ = {
+			isa = PBXGroup;
+			children = (
+				E274771C1D4C633E0080C52C /* Assets.xcassets */,
+				E24E92941D4F0A9B002282E9 /* AVPlayerControlView.xib */,
+			);
+			name = Asset;
+			sourceTree = "<group>";
+		};
 		E27477041D4C633E0080C52C = {
 			isa = PBXGroup;
 			children = (
 				E27477271D4C648F0080C52C /* Podspec Metadata */,
+				E24E92931D4F0A45002282E9 /* Asset */,
 				E27477281D4C64990080C52C /* Classes */,
 				E274770F1D4C633E0080C52C /* AVPlayerView */,
 				E274770E1D4C633E0080C52C /* Products */,
@@ -86,8 +105,9 @@
 				E27477171D4C633E0080C52C /* ViewController.m */,
 				E27477381D4C66540080C52C /* Test1ViewController.h */,
 				E27477391D4C66540080C52C /* Test1ViewController.m */,
+				E22E3E201D4F518A00069665 /* Test2ViewController.h */,
+				E22E3E211D4F518A00069665 /* Test2ViewController.m */,
 				E27477191D4C633E0080C52C /* Main.storyboard */,
-				E274771C1D4C633E0080C52C /* Assets.xcassets */,
 				E274771E1D4C633E0080C52C /* LaunchScreen.storyboard */,
 				E27477211D4C633E0080C52C /* Info.plist */,
 				E27477101D4C633E0080C52C /* Supporting Files */,
@@ -116,10 +136,13 @@
 		E27477281D4C64990080C52C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E22E3E231D4F5AF900069665 /* AVPlayerViewEnum.h */,
 				E27477311D4C652F0080C52C /* AVPlayerView.h */,
 				E27477321D4C652F0080C52C /* AVPlayerView.m */,
 				E274772F1D4C652F0080C52C /* AVPlayerContentView.h */,
 				E27477301D4C652F0080C52C /* AVPlayerContentView.m */,
+				E24E92901D4F0A33002282E9 /* AVPlayerControlView.h */,
+				E24E92911D4F0A33002282E9 /* AVPlayerControlView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -190,6 +213,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24E92951D4F0A9B002282E9 /* AVPlayerControlView.xib in Resources */,
 				E27477201D4C633E0080C52C /* LaunchScreen.storyboard in Resources */,
 				E27477371D4C655A0080C52C /* test.mp4 in Resources */,
 				E274771D1D4C633E0080C52C /* Assets.xcassets in Resources */,
@@ -207,8 +231,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24E92921D4F0A33002282E9 /* AVPlayerControlView.m in Sources */,
 				E27477181D4C633E0080C52C /* ViewController.m in Sources */,
 				E27477331D4C652F0080C52C /* AVPlayerContentView.m in Sources */,
+				E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */,
 				E27477151D4C633E0080C52C /* AppDelegate.m in Sources */,
 				E274772E1D4C64B30080C52C /* README.md in Sources */,
 				E274773A1D4C66540080C52C /* Test1ViewController.m in Sources */,

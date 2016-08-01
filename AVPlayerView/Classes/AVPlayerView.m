@@ -8,14 +8,19 @@
 
 #import "AVPlayerView.h"
 #import "AVPlayerContentView.h"
+#import "AVPlayerControlView.h"
 
 @interface AVPlayerView ()
+<AVPlayerControlViewDelegate,
+AVPlayerContentViewDelegate>
 {
     BOOL didAppearFlag;
     
     UIWindowLevel previousWindowLevel;
 }
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
+@property (nonatomic, strong) AVPlayerItem *playerItem;
+@property (strong, nonatomic) AVPlayerControlView *playerControlView;
 @property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, assign) BOOL isFullSize;
 
@@ -47,7 +52,8 @@
 #pragma mark - Initialize
 - (void)initializeProperties
 {
-    self.backgroundColor    = [UIColor clearColor];
+    self.clipsToBounds      = YES;
+    self.backgroundColor    = [UIColor blackColor];
     previousWindowLevel     = [[UIApplication sharedApplication] keyWindow].windowLevel;
     self.dimmedEffect       = true;
     self.pauseWhenDisappear = true;
@@ -57,6 +63,7 @@
 - (void)initializePlayer
 {
     _playerContentView = [[AVPlayerContentView alloc] init];
+    _playerContentView.delegate = self;
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
 }
 
@@ -98,7 +105,12 @@
 #pragma mark - Trigger
 - (void)playerWithContentURL:(NSURL *)url
 {
+    self.playerItem =[AVPlayerItem playerItemWithURL:url];
     [self.playerContentView playerWithPlayerItem:[AVPlayerItem playerItemWithURL:url] time:kCMTimeZero];
+    if (self.showControl) {
+        [self.playerControlView reloadControlView];
+        [self.playerControlView updateProgress:0];
+    }
 }
 
 #pragma mark - UIGestureRecognizer Callback
@@ -106,6 +118,9 @@
 {
     if (self.tapCallBack) {
         self.tapCallBack(self);
+    }
+    if (self.showControl) {
+        [self.playerControlView showControlView];
     }
 }
 
@@ -137,8 +152,27 @@
 {
     _autoplay = autoplay;
     self.playerContentView.autoplay = autoplay;
-    if (autoplay && self.playerContentView) {
+    if (autoplay) {
         [self.playerContentView playVideo];
+    }
+}
+
+- (void)setShowControl:(BOOL)showControl
+{
+    _showControl = showControl;
+    if (self.showControl) {
+        if (self.playerControlView == nil) {
+            self.playerControlView = [AVPlayerControlView getControlView];
+            self.playerControlView.delegate = self;
+            if (self.playerItem) {
+                [self.playerControlView reloadControlView];
+                [self.playerControlView updateProgress:0];
+            }
+        }
+    } else {
+        self.playerControlView.delegate = nil;
+        [self.playerControlView removeFromSuperview];
+        self.playerControlView = nil;
     }
 }
 
@@ -176,15 +210,83 @@
     }
 }
 
-#pragma mark - IBAction
-- (IBAction)playButtonClicked
+#pragma mark - AVContentView Delegate
+- (void)playerContentView:(AVPlayerContentView *)contentView stateChanged:(AVPlayerState)state
 {
-    [self.playerContentView playVideo];
+    [self.playerControlView reloadControlView];
+}
+- (void)playerContentView:(AVPlayerContentView *)contentView progressChanged:(float)timeValue
+{
+    [self.playerControlView updateProgress:timeValue];
 }
 
-- (IBAction)pauseButtonClicked
+#pragma mark - AVControlView Delegate
+- (AVPlayerState)currentControlStateForControlView:(AVPlayerControlView *)controlView
 {
-    [self.playerContentView pauseVideo];
+    if ([self.playerContentView isPlaying]) {
+        return AVPlayerStatePlay;
+    } else if ([self.playerContentView isFinished]) {
+        return AVPlayerStateFinish;
+    } else {
+        return AVPlayerStatePause;
+    }
+}
+
+- (AVPlayerViewMode)currentViewModeForControlView:(AVPlayerControlView *)controlView
+{
+    return (self.isFullSize?AVPlayerViewModeFullSize:AVPlayerViewModeNormal);
+
+}
+
+- (float)totalDurationForControlView:(AVPlayerControlView *)controlView
+{
+    AVAsset *asset = [self.playerItem asset];
+    return CMTimeGetSeconds(asset.duration);
+}
+
+- (void)controlView:(AVPlayerControlView *)controlView beginValueChanged:(float)time
+{
+    if ([self.playerContentView isPlaying]) {
+        [self.playerContentView pauseVideo];
+        controlView.needToAutoPlay = true;
+    } else {
+        controlView.needToAutoPlay = false;
+    }
+}
+
+- (void)controlView:(AVPlayerControlView *)controlView timeValueChanged:(float)time
+{
+    [self.playerContentView seekToTime:time];
+}
+
+- (void)controlView:(AVPlayerControlView *)controlView finishValueChanged:(float)time
+{
+    [self.playerContentView seekToTime:time];
+    if (controlView.needToAutoPlay) {
+        [self.playerContentView playVideo];
+    }
+}
+
+- (void)controlButtonClickedAtControlView:(AVPlayerControlView *)controlView
+{
+    if ([self.playerContentView isPlaying]) {
+        [self.playerContentView pauseVideo];
+    } else if ([self.playerContentView isFinished]) {
+        [self.playerContentView playVideo];
+    } else {
+        [self.playerContentView playVideo];
+    }
+    [controlView reloadControlView];
+}
+
+- (void)controlView:(AVPlayerControlView *)controlView currentViewMode:(AVPlayerViewMode)viewMode
+{
+    if (AVPlayerViewModeNormal == viewMode) {
+        [self fullSizeMode];
+    } else {
+        [self normalSizeMode];
+    }
+    [controlView reloadControlView];
 }
 
 #pragma mark - Action
@@ -199,9 +301,11 @@
 - (void)normalSizeMode
 {
     self.isFullSize = NO;
+    [self.playerControlView removeFromSuperview];
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = previousWindowLevel;
+    [window layoutIfNeeded];
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -209,12 +313,14 @@
         self.playerContentView.backgroundColor = [UIColor clearColor];
     } completion:^(BOOL finished) {
         [self addSubview:self.playerContentView toSuperView:self];
+        [self addSubview:self.playerControlView toSuperView:self];
     }];
 }
 
 - (void)fullSizeMode
 {
     self.isFullSize = YES;
+    [self.playerControlView removeFromSuperview];
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = UIWindowLevelStatusBar;
@@ -239,12 +345,16 @@
         
     } completion:^(BOOL finished) {
         [self addSubview:self.playerContentView toSuperView:window];
+        [self addSubview:self.playerControlView toSuperView:window];
     }];
 }
 
 #pragma mark - Private
 - (void)addSubview:(UIView *)subView toSuperView:(UIView *)superView
 {
+    if (subView == nil) {
+        return;
+    }
     [superView addSubview:subView];
     [superView addConstraint:[NSLayoutConstraint constraintWithItem:subView
                                                           attribute:NSLayoutAttributeTop
@@ -277,6 +387,7 @@
                                                          multiplier:1
                                                            constant:0]];
 }
+
 
 //- (void)addAnimationInLayer:(CALayer *)layer
 //{

@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "AVPlayerViewEnum.h"
+
+@protocol AVPlayerContentViewDelegate;
 
 @interface AVPlayerContentView : UIView
 
@@ -16,6 +19,7 @@
 @property (nonatomic, strong, readonly) AVPlayerLayer *layer;
 #pragma clang diagnostic pop
 
+@property (nonatomic, weak) id <AVPlayerContentViewDelegate> delegate;
 @property (strong, nonatomic) AVPlayer *avPlayer;
 
 @property (nonatomic, assign) BOOL loop;
@@ -24,7 +28,21 @@
 
 - (void)playerWithPlayerItem:(AVPlayerItem *)playerItem time:(CMTime)startTime;
 
+- (void)seekToTime:(float)time;
 - (void)playVideo;
 - (void)pauseVideo;
+
+#pragma mark - Condition
+- (BOOL)isPlaying;
+- (BOOL)isFinished;
+
+@end
+
+
+@protocol AVPlayerContentViewDelegate <NSObject>
+
+@required
+- (void)playerContentView:(AVPlayerContentView *)contentView stateChanged:(AVPlayerState)state;
+- (void)playerContentView:(AVPlayerContentView *)contentView progressChanged:(float)timeValue;
 
 @end

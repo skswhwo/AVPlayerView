@@ -39,6 +39,15 @@
     [self.avPlayer seekToTime:startTime];
     [self.layer setPlayer:self.avPlayer];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerFinishedPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
+
+    __weak AVPlayerContentView *weakSelf = self;
+    [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC)
+                                          queue:NULL
+                                     usingBlock:^(CMTime time){
+                                         if ([weakSelf.delegate respondsToSelector:@selector(playerContentView:progressChanged:)]) {
+                                             [weakSelf.delegate playerContentView:weakSelf progressChanged:CMTimeGetSeconds(weakSelf.avPlayer.currentTime)];
+                                         }
+                                     }];
     if (self.autoplay) {
         [self playVideo];
     }
@@ -53,10 +62,17 @@
         if (self.MAX_LOOP_COUNT > loopCount) {
             [self playVideo];
         }
+    } else {
+        [self.delegate playerContentView:self stateChanged:AVPlayerStateFinish];
     }
 }
 
 #pragma mark - Action
+- (void)seekToTime:(float)time
+{
+    [self.avPlayer seekToTime:CMTimeMake(time*1000, 1000)];
+    isFinished = NO;
+}
 - (void)playVideo
 {
     if (isFinished) {
@@ -64,6 +80,7 @@
         [self.avPlayer seekToTime:kCMTimeZero];
     }
     [self.avPlayer play];
+    [self.delegate playerContentView:self stateChanged:AVPlayerStatePlay];
 }
 
 - (void)pauseVideo
@@ -71,12 +88,16 @@
     if ([self isPlaying]) {
         [self.avPlayer pause];
     }
+    [self.delegate playerContentView:self stateChanged:AVPlayerStatePause];
 }
 
-#pragma mark - Private
+#pragma mark - Condition
 - (BOOL)isPlaying
 {
     return (self.avPlayer.rate != 0 && self.avPlayer.error == nil);
 }
-
+- (BOOL)isFinished
+{
+    return isFinished;
+}
 @end

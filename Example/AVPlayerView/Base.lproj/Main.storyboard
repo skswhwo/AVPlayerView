@@ -48,11 +48,27 @@
                                     <segue destination="sif-us-5Ok" kind="show" id="oGY-fs-fYP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5E-yg-pgK">
+                                <rect key="frame" x="59" y="187" width="202" height="44"/>
+                                <color key="backgroundColor" red="0.039215686270000001" green="0.73725490199999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="5hr-U8-XzH"/>
+                                </constraints>
+                                <state key="normal" title="With Player control">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Uid-F9-0V2" kind="show" id="lNW-7n-NLD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="w5E-yg-pgK" firstAttribute="top" secondItem="FHo-7e-ugM" secondAttribute="bottom" constant="29" id="5uf-WO-dIQ"/>
+                            <constraint firstItem="w5E-yg-pgK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="43" id="N0A-eP-Cdj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FHo-7e-ugM" secondAttribute="trailing" constant="47" id="ZD9-rp-aYY"/>
                             <constraint firstItem="FHo-7e-ugM" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="frS-vp-rvg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="w5E-yg-pgK" secondAttribute="trailing" constant="43" id="r7E-bO-5q4"/>
                             <constraint firstItem="FHo-7e-ugM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="47" id="xe7-Cd-j7v"/>
                         </constraints>
                     </view>
@@ -157,6 +173,101 @@
             </objects>
             <point key="canvasLocation" x="689" y="305"/>
         </scene>
+        <!--Test2 View Controller-->
+        <scene sceneID="Grc-iR-FaO">
+            <objects>
+                <viewController id="Uid-F9-0V2" customClass="Test2ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="FMU-Mf-MFF"/>
+                        <viewControllerLayoutGuide type="bottom" id="8Kz-JG-YWG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yh0-Ud-UTA">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lSa-kB-9vn">
+                                <rect key="frame" x="198" y="364" width="51" height="31"/>
+                                <connections>
+                                    <action selector="valueChanged:" destination="Uid-F9-0V2" eventType="valueChanged" id="QhR-iP-fAV"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xej-Xd-vNV">
+                                <rect key="frame" x="198" y="403" width="51" height="31"/>
+                                <connections>
+                                    <action selector="valueChanged:" destination="Uid-F9-0V2" eventType="valueChanged" id="aQc-pp-7ek"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sLs-zF-68h">
+                                <rect key="frame" x="198" y="442" width="51" height="31"/>
+                                <connections>
+                                    <action selector="valueChanged:" destination="Uid-F9-0V2" eventType="valueChanged" id="CJE-ZF-Hm5"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="autoplay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DDW-KG-uaU">
+                                <rect key="frame" x="73" y="364" width="66" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="loop" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJK-Gq-Wss">
+                                <rect key="frame" x="105" y="403" width="34" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="dimmed effect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jOQ-1a-7DV">
+                                <rect key="frame" x="27" y="442" width="112" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEG-zb-PYB">
+                                <rect key="frame" x="259" y="364" width="45" height="30"/>
+                                <state key="normal" title="_Blank"/>
+                                <connections>
+                                    <segue destination="fuj-56-asd" kind="show" id="u8g-bl-VT3"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Es-Q0-yVV" customClass="AVPlayerView">
+                                <rect key="frame" x="32" y="94" width="256" height="240"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="G9O-oQ-SNK"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="xej-Xd-vNV" firstAttribute="leading" secondItem="IJK-Gq-Wss" secondAttribute="trailing" constant="59" id="2a5-Ch-KR1"/>
+                            <constraint firstItem="sLs-zF-68h" firstAttribute="top" secondItem="xej-Xd-vNV" secondAttribute="bottom" constant="8" id="ATu-aL-O1t"/>
+                            <constraint firstItem="lSa-kB-9vn" firstAttribute="leading" secondItem="DDW-KG-uaU" secondAttribute="trailing" constant="59" id="Bz6-vs-wXv"/>
+                            <constraint firstItem="lSa-kB-9vn" firstAttribute="top" secondItem="5Es-Q0-yVV" secondAttribute="bottom" constant="30" id="FHg-KW-APw"/>
+                            <constraint firstItem="xej-Xd-vNV" firstAttribute="top" secondItem="lSa-kB-9vn" secondAttribute="bottom" constant="8" id="IGb-3z-kqg"/>
+                            <constraint firstItem="sLs-zF-68h" firstAttribute="leading" secondItem="jOQ-1a-7DV" secondAttribute="trailing" constant="59" id="MK0-dk-zfe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lSa-kB-9vn" secondAttribute="trailing" constant="57" id="Qwn-EU-GQZ"/>
+                            <constraint firstItem="5Es-Q0-yVV" firstAttribute="top" secondItem="FMU-Mf-MFF" secondAttribute="bottom" constant="30" id="U3f-g5-UMq"/>
+                            <constraint firstItem="DDW-KG-uaU" firstAttribute="top" secondItem="lSa-kB-9vn" secondAttribute="top" id="XTK-Zp-CNs"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="xej-Xd-vNV" secondAttribute="trailing" constant="57" id="YpG-Ra-uXB"/>
+                            <constraint firstItem="LEG-zb-PYB" firstAttribute="top" secondItem="lSa-kB-9vn" secondAttribute="top" id="dnI-3p-RDN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="LEG-zb-PYB" secondAttribute="trailing" id="gC8-Zj-AGR"/>
+                            <constraint firstItem="5Es-Q0-yVV" firstAttribute="leading" secondItem="yh0-Ud-UTA" secondAttribute="leadingMargin" constant="16" id="gDN-0l-Zsw"/>
+                            <constraint firstItem="jOQ-1a-7DV" firstAttribute="top" secondItem="IJK-Gq-Wss" secondAttribute="bottom" constant="18" id="hIq-nc-FP9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5Es-Q0-yVV" secondAttribute="trailing" constant="16" id="ne9-i3-N4N"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sLs-zF-68h" secondAttribute="trailing" constant="57" id="p0p-NK-NuX"/>
+                            <constraint firstItem="IJK-Gq-Wss" firstAttribute="top" secondItem="DDW-KG-uaU" secondAttribute="bottom" constant="18" id="pcn-ME-wGB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="autoplaySwitch" destination="lSa-kB-9vn" id="ppl-rC-meB"/>
+                        <outlet property="avPlayerView" destination="5Es-Q0-yVV" id="fGY-VD-j1c"/>
+                        <outlet property="dimmedEffectSwitch" destination="sLs-zF-68h" id="ESv-no-DQI"/>
+                        <outlet property="loopSwitch" destination="xej-Xd-vNV" id="v4e-ZO-77d"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Y6t-mH-ZK6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="410" y="924"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="am5-iq-HfB">
             <objects>
@@ -174,6 +285,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q6A-IN-LGw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1072" y="305"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="ZXa-8l-aVb">
+            <objects>
+                <viewController id="fuj-56-asd" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZpL-5M-XjS"/>
+                        <viewControllerLayoutGuide type="bottom" id="4kb-2c-KYY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="X6k-7H-wox">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4JA-Kb-Hlw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="785" y="924"/>
         </scene>
     </scenes>
 </document>
