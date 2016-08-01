@@ -9,7 +9,7 @@ s.name             = 'AVPlayerView'
   s.source           = { :git => 'https://github.com/skswhwo/AVPlayerView.git', :tag => s.version.to_s }
   s.ios.deployment_target = '7.0'
   s.source_files     = 'AVPlayerView/Classes/**/*.{h,m}'
-  s.resources        = 'AVPlayerView/Classes/**/*.{png,bundle,xib,nib,xcassets}'
+  s.resources        = 'AVPlayerView/Assets/**/*.{png,bundle,xib,nib,xcassets}'
 
   s.requires_arc     = true
 end
