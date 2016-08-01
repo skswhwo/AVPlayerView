@@ -214,6 +214,9 @@ AVPlayerContentViewDelegate>
 - (void)playerContentView:(AVPlayerContentView *)contentView stateChanged:(AVPlayerState)state
 {
     [self.playerControlView reloadControlView];
+    if (self.showControl && state == AVPlayerStateFinish) {
+        [self.playerControlView showControlView];
+    }
 }
 - (void)playerContentView:(AVPlayerContentView *)contentView progressChanged:(float)timeValue
 {
@@ -251,6 +254,7 @@ AVPlayerContentViewDelegate>
         controlView.needToAutoPlay = true;
     } else {
         controlView.needToAutoPlay = false;
+        [controlView reloadControlView];
     }
 }
 

@@ -10,6 +10,9 @@ AVPlayer module that implemented by subclass of UIView class
 - Easy to use 
 
 ![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample1.gif "demo")
+![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample2.png "demo")
+![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample3.png "demo")
+![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample4.png "demo")
 
 ## Installation
 

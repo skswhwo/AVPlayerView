@@ -72,7 +72,7 @@
 - (IBAction)controlButtonClicked:(UIButton *)controlButton
 {
     [self.delegate controlButtonClickedAtControlView:self];
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
 }
 
 - (IBAction)touchDownSlider:(UISlider *)slider
@@ -80,7 +80,7 @@
     if ([self.delegate respondsToSelector:@selector(controlView:beginValueChanged:)]) {
         [self.delegate controlView:self beginValueChanged:slider.value];
     }
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)slider
@@ -88,7 +88,7 @@
     if ([self.delegate respondsToSelector:@selector(controlView:timeValueChanged:)]) {
         [self.delegate controlView:self timeValueChanged:slider.value];
     }
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
 }
 
 - (IBAction)sliderDragFinished:(UISlider *)slider
@@ -96,7 +96,7 @@
     if ([self.delegate respondsToSelector:@selector(controlView:finishValueChanged:)]) {
         [self.delegate controlView:self finishValueChanged:slider.value];
     }
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
 }
 
 - (IBAction)viewModeButtonClicked:(UIButton *)viewModeButton
@@ -108,7 +108,7 @@
             [self.delegate controlView:self currentViewMode:AVPlayerViewModeNormal];
         }
     }
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
 }
 
 - (IBAction)controlViewTapped:(id)sender
@@ -117,31 +117,35 @@
 }
 
 #pragma mark - Visibility
-- (void)autoHideControlView
+- (void)runHideControlViewTimer
 {
     if (hideTimer) {
         [hideTimer invalidate];
         hideTimer = nil;
     }
-    AVPlayerState state = [self.delegate currentControlStateForControlView:self];
-    if (state == AVPlayerStatePlay) {
-        hideTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(hideControlView) userInfo:nil repeats:NO];
-    }
+    hideTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(autoHideControlView) userInfo:nil repeats:NO];
 }
 
 - (void)showControlView
 {
-    [self autoHideControlView];
+    [self runHideControlViewTimer];
     [UIView animateWithDuration:0.2 animations:^{
         self.alpha = 1;
     }];
 }
 
+- (void)autoHideControlView
+{
+    AVPlayerState state = [self.delegate currentControlStateForControlView:self];
+    if (state == AVPlayerStatePlay) {
+        [self hideControlView];
+    }
+}
 - (void)hideControlView
 {
     [hideTimer invalidate];
     hideTimer = nil;
-    
+
     [UIView animateWithDuration:0.2 animations:^{
         self.alpha = 0;
     }];
