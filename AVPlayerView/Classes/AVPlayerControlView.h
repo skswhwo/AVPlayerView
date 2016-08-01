@@ -34,13 +34,14 @@
 - (float)totalDurationForControlView:(AVPlayerControlView *)controlView;
 - (AVPlayerState)currentControlStateForControlView:(AVPlayerControlView *)controlView;
 - (AVPlayerViewMode)currentViewModeForControlView:(AVPlayerControlView *)controlView;
-- (void)controlButtonClickedAtControlView:(AVPlayerControlView *)controlView;
+- (void)actionButtonClickedAtControlView:(AVPlayerControlView *)controlView;
+- (void)controlViewClicked:(AVPlayerControlView *)controlView;
 
 @optional
 - (void)controlView:(AVPlayerControlView *)controlView beginValueChanged:(float)time;
 - (void)controlView:(AVPlayerControlView *)controlView timeValueChanged:(float)time;
 - (void)controlView:(AVPlayerControlView *)controlView finishValueChanged:(float)time;
 
-- (void)controlView:(AVPlayerControlView *)controlView currentViewMode:(AVPlayerViewMode)viewMode;
+- (void)controlView:(AVPlayerControlView *)controlView viewModeClicked:(AVPlayerViewMode)viewMode;
 
 @end

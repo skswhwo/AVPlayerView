@@ -21,7 +21,6 @@ AVPlayerContentViewDelegate>
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (strong, nonatomic) AVPlayerControlView *playerControlView;
-@property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, assign) BOOL isFullSize;
 
 @end
@@ -65,6 +64,11 @@ AVPlayerContentViewDelegate>
     _playerContentView = [[AVPlayerContentView alloc] init];
     _playerContentView.delegate = self;
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    self.playerControlView = [AVPlayerControlView getControlView];
+    self.playerControlView.delegate = self;
+    [self setShowControl:YES];
+    [self.playerControlView updateProgress:0];
 }
 
 #pragma mark - Notifiation
@@ -113,35 +117,7 @@ AVPlayerContentViewDelegate>
     }
 }
 
-#pragma mark - UIGestureRecognizer Callback
-- (void)playerTapped:(UIGestureRecognizer *)gesture
-{
-    if (self.tapCallBack) {
-        self.tapCallBack(self);
-    }
-    if (self.showControl) {
-        [self.playerControlView showControlView];
-    }
-}
-
 #pragma mark - Setter
-- (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack
-{
-    _tapCallBack = tapCallBack;
-    
-    if (_tapGesture == nil) {
-        _tapGesture  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTapped:)];
-        [self.playerContentView addGestureRecognizer:_tapGesture];
-    }
-}
-- (void)setDidAppear:(AVPlayerViewCallback)didAppear
-{
-    _didAppear = didAppear;
-}
-- (void)setDidDisappear:(AVPlayerViewCallback)didDisappear
-{
-    _didDisappear = didDisappear;
-}
 - (void)setLoop:(BOOL)loop
 {
     _loop = loop;
@@ -160,20 +136,7 @@ AVPlayerContentViewDelegate>
 - (void)setShowControl:(BOOL)showControl
 {
     _showControl = showControl;
-    if (self.showControl) {
-        if (self.playerControlView == nil) {
-            self.playerControlView = [AVPlayerControlView getControlView];
-            self.playerControlView.delegate = self;
-            if (self.playerItem) {
-                [self.playerControlView reloadControlView];
-                [self.playerControlView updateProgress:0];
-            }
-        }
-    } else {
-        self.playerControlView.delegate = nil;
-        [self.playerControlView removeFromSuperview];
-        self.playerControlView = nil;
-    }
+    [self.playerControlView setHidden:!showControl];
 }
 
 #pragma mark - View Callback
@@ -247,6 +210,13 @@ AVPlayerContentViewDelegate>
     return CMTimeGetSeconds(asset.duration);
 }
 
+- (void)controlViewClicked:(AVPlayerControlView *)controlView
+{
+    if (self.tapCallBack) {
+        self.tapCallBack(self);
+    }
+}
+
 - (void)controlView:(AVPlayerControlView *)controlView beginValueChanged:(float)time
 {
     if ([self.playerContentView isPlaying]) {
@@ -271,7 +241,7 @@ AVPlayerContentViewDelegate>
     }
 }
 
-- (void)controlButtonClickedAtControlView:(AVPlayerControlView *)controlView
+- (void)actionButtonClickedAtControlView:(AVPlayerControlView *)controlView
 {
     if ([self.playerContentView isPlaying]) {
         [self.playerContentView pauseVideo];
@@ -283,7 +253,7 @@ AVPlayerContentViewDelegate>
     [controlView reloadControlView];
 }
 
-- (void)controlView:(AVPlayerControlView *)controlView currentViewMode:(AVPlayerViewMode)viewMode
+- (void)controlView:(AVPlayerControlView *)controlView viewModeClicked:(AVPlayerViewMode)viewMode
 {
     if (AVPlayerViewModeNormal == viewMode) {
         [self fullSizeMode];
@@ -314,8 +284,11 @@ AVPlayerContentViewDelegate>
     
     [UIView animateWithDuration:0.3 animations:^{
         self.playerContentView.frame = rect;
-        self.playerContentView.backgroundColor = [UIColor clearColor];
+        if (self.dimmedEffect) {
+            self.playerContentView.backgroundColor = [UIColor clearColor];
+        }
     } completion:^(BOOL finished) {
+        self.playerContentView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.playerContentView toSuperView:self];
         [self addSubview:self.playerControlView toSuperView:self];
     }];

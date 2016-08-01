@@ -12,9 +12,11 @@
 {
     NSTimer *hideTimer;
 }
-@property (weak, nonatomic) IBOutlet UIButton *controlButton;
-@property (weak, nonatomic) IBOutlet UIButton *viewModeButton;
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (weak, nonatomic) IBOutlet UIView *bottomControlView;
 
+
+@property (weak, nonatomic) IBOutlet UIButton *viewModeButton;
 @property (weak, nonatomic) IBOutlet UILabel *currentTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 @property (weak, nonatomic) IBOutlet UISlider *timeSlider;
@@ -49,7 +51,7 @@
     }
     
     AVPlayerState state = [self.delegate currentControlStateForControlView:self];
-    [self.controlButton setImage:[self getImageForState:state] forState:UIControlStateNormal];
+    [self.actionButton setImage:[self getImageForState:state] forState:UIControlStateNormal];
     
     AVPlayerViewMode viewMode = [self.delegate currentViewModeForControlView:self];
     switch (viewMode) {
@@ -69,9 +71,9 @@
 }
 
 #pragma mark - IBAction
-- (IBAction)controlButtonClicked:(UIButton *)controlButton
+- (IBAction)actionButtonClicked:(UIButton *)actionButton
 {
-    [self.delegate controlButtonClickedAtControlView:self];
+    [self.delegate actionButtonClickedAtControlView:self];
     [self runHideControlViewTimer];
 }
 
@@ -101,11 +103,11 @@
 
 - (IBAction)viewModeButtonClicked:(UIButton *)viewModeButton
 {
-    if ([self.delegate respondsToSelector:@selector(controlView:currentViewMode:)]) {
+    if ([self.delegate respondsToSelector:@selector(controlView:viewModeClicked:)]) {
         if (viewModeButton.selected) {
-            [self.delegate controlView:self currentViewMode:AVPlayerViewModeFullSize];
+            [self.delegate controlView:self viewModeClicked:AVPlayerViewModeFullSize];
         } else {
-            [self.delegate controlView:self currentViewMode:AVPlayerViewModeNormal];
+            [self.delegate controlView:self viewModeClicked:AVPlayerViewModeNormal];
         }
     }
     [self runHideControlViewTimer];
@@ -113,7 +115,29 @@
 
 - (IBAction)controlViewTapped:(id)sender
 {
-    [self hideControlView];
+    [self.delegate controlViewClicked:self];
+    
+    if ([self controlVisible]) {
+        [self hideControlView];
+    } else {
+        [self showControlView];
+    }
+}
+
+- (IBAction)pinchAVPlayer:(UIPinchGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        AVPlayerViewMode viewMode = [self.delegate currentViewModeForControlView:self];
+        if (viewMode == AVPlayerViewModeNormal) {
+            if (recognizer.scale > 1) {
+                [self viewModeButtonClicked:self.viewModeButton];
+            }
+        } else {
+            if (recognizer.scale < 1) {
+                [self viewModeButtonClicked:self.viewModeButton];
+            }
+        }
+    }
 }
 
 #pragma mark - Visibility
@@ -130,7 +154,8 @@
 {
     [self runHideControlViewTimer];
     [UIView animateWithDuration:0.2 animations:^{
-        self.alpha = 1;
+        self.actionButton.alpha = 1;
+        self.bottomControlView.alpha = 1;
     }];
 }
 
@@ -147,8 +172,15 @@
     hideTimer = nil;
 
     [UIView animateWithDuration:0.2 animations:^{
-        self.alpha = 0;
+        self.actionButton.alpha = 0;
+        self.bottomControlView.alpha = 0;
     }];
+}
+
+- (void)setHidden:(BOOL)hidden
+{
+    [self.actionButton setHidden:hidden];
+    [self.bottomControlView setHidden:hidden];
 }
 
 #pragma mark - Private
@@ -162,6 +194,11 @@
         case AVPlayerStateFinish:
             return [UIImage imageNamed:@"video_replay_white"];
     }
+}
+
+- (BOOL)controlVisible
+{
+    return (self.actionButton.alpha == 1);
 }
 
 - (NSString *)getFormattedTime:(float)time

@@ -33,7 +33,6 @@
     [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setShowControl:YES];
 }
 
 - (IBAction)valueChanged:(id)sender

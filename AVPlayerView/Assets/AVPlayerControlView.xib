@@ -12,20 +12,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Amu-hj-EHI">
-                    <rect key="frame" x="0.0" y="0.0" width="501" height="236"/>
+                    <rect key="frame" x="0.0" y="0.0" width="501" height="284"/>
                     <connections>
                         <action selector="controlViewTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="Xt0-bc-1uX"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Qb-7R-smv">
-                    <rect key="frame" x="214" y="86" width="72" height="72"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="72" id="JN2-cl-96M"/>
-                        <constraint firstAttribute="width" constant="72" id="mwd-fi-EsX"/>
-                    </constraints>
-                    <state key="normal" image="video_play_white"/>
-                    <connections>
-                        <action selector="controlButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="jhq-T9-Ona"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uwZ-QH-Fiu">
@@ -113,6 +102,17 @@
                         <constraint firstItem="KJs-Hu-06M" firstAttribute="top" secondItem="uwZ-QH-Fiu" secondAttribute="top" id="vzv-wI-Edq"/>
                     </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Qb-7R-smv">
+                    <rect key="frame" x="214" y="86" width="72" height="72"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="72" id="JN2-cl-96M"/>
+                        <constraint firstAttribute="width" constant="72" id="mwd-fi-EsX"/>
+                    </constraints>
+                    <state key="normal" image="video_play_white"/>
+                    <connections>
+                        <action selector="actionButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="fvJ-mM-scU"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
@@ -125,20 +125,27 @@
                 <constraint firstItem="Amu-hj-EHI" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fR3-lg-hQC"/>
                 <constraint firstAttribute="trailing" secondItem="Amu-hj-EHI" secondAttribute="trailing" id="hws-Oy-2rf"/>
                 <constraint firstItem="2Qb-7R-smv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-20" id="jAz-MR-aNF"/>
-                <constraint firstItem="uwZ-QH-Fiu" firstAttribute="top" secondItem="Amu-hj-EHI" secondAttribute="bottom" id="k2L-SL-UR9"/>
+                <constraint firstAttribute="bottom" secondItem="Amu-hj-EHI" secondAttribute="bottom" id="l7i-7j-KXx"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="controlButton" destination="2Qb-7R-smv" id="77w-Kw-a0c"/>
+                <outlet property="actionButton" destination="2Qb-7R-smv" id="Iac-ce-Qe8"/>
+                <outlet property="bottomControlView" destination="uwZ-QH-Fiu" id="A29-wk-ceg"/>
                 <outlet property="currentTimeLabel" destination="Tsx-Oh-iHk" id="dHq-jX-odu"/>
                 <outlet property="endTimeLabel" destination="hfc-cl-8xl" id="LGa-q6-b5H"/>
                 <outlet property="progressView" destination="nAO-rq-89S" id="n26-FO-7mE"/>
                 <outlet property="timeSlider" destination="AAA-mY-aau" id="sEQ-7c-k3q"/>
                 <outlet property="viewModeButton" destination="CvP-o3-v5U" id="QjZ-lo-OVL"/>
+                <outletCollection property="gestureRecognizers" destination="I81-1l-ftj" appends="YES" id="h0P-Nj-xzw"/>
             </connections>
             <point key="canvasLocation" x="338.5" y="252"/>
         </view>
+        <pinchGestureRecognizer id="I81-1l-ftj">
+            <connections>
+                <action selector="pinchAVPlayer:" destination="iN0-l3-epB" id="Roz-ml-16M"/>
+            </connections>
+        </pinchGestureRecognizer>
     </objects>
     <resources>
         <image name="fullscreen_exit_white" width="24" height="24"/>

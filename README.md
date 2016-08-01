@@ -36,9 +36,10 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
 [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
 self.avPlayerView.autoplay      = YES;
 self.avPlayerView.loop          = YES;
-self.avPlayerView.dimmedEffect  = YES;                  //default: true
+self.avPlayerView.dimmedEffect  = YES;
 self.pauseWhenDisappear         = YES;                  //default: true
 self.playWhenAppear             = YES;                  //default: true (require autoplay)
+self.avPlayerView.showControl   = NO;                   //default: true
 self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 
 [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
@@ -46,7 +47,7 @@ self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
         [playerView normalSizeMode];
     } else {
         [playerView fullSizeMode];
-    } ;
+    }
 }];
 
 [self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
@@ -58,6 +59,26 @@ self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 }];
 
 ```
+
+```objective-c
+NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp4"];
+[self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
+self.pauseWhenDisappear         = YES;                  //default: true
+self.avPlayerView.showControl   = YES;                  //default: true
+self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
+
+[self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
+    //do something;
+}];
+[self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+    //do something;
+}];
+[self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+    //do something;
+}];
+
+```
+
 
 ## Author
 

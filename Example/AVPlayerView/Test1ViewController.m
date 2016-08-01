@@ -26,6 +26,7 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
     [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
     [self valueChanged:nil];
+    self.avPlayerView.showControl = NO;
     [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
         if ([playerView isFullSize]) {
             [playerView normalSizeMode];
