@@ -6,7 +6,6 @@ AVPlayer module that implemented by subclass of UIView class
 - Support appear, disappear callback
 - Support tap gesture callback
 - Support simple control
-
 - Easy to use 
 
 ![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample1.gif "demo")
