@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E21BA05A1D50397F00231D03 /* Test3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21BA0591D50397F00231D03 /* Test3ViewController.m */; };
+		E21BA05C1D50985900231D03 /* land.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E21BA05B1D50982300231D03 /* land.mp4 */; };
 		E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22E3E211D4F518A00069665 /* Test2ViewController.m */; };
 		E22E3E271D4FA74F00069665 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E22E3E261D4FA74F00069665 /* test.mp4 */; };
 		E24E92921D4F0A33002282E9 /* AVPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E92911D4F0A33002282E9 /* AVPlayerControlView.m */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		E21BA0581D50397F00231D03 /* Test3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test3ViewController.h; sourceTree = "<group>"; };
 		E21BA0591D50397F00231D03 /* Test3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test3ViewController.m; sourceTree = "<group>"; };
+		E21BA05B1D50982300231D03 /* land.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = land.mp4; sourceTree = "<group>"; };
 		E22E3E201D4F518A00069665 /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
 		E22E3E211D4F518A00069665 /* Test2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test2ViewController.m; sourceTree = "<group>"; };
 		E22E3E231D4F5AF900069665 /* AVPlayerViewEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerViewEnum.h; path = ../AVPlayerView/Classes/AVPlayerViewEnum.h; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		E27477351D4C653F0080C52C /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				E21BA05B1D50982300231D03 /* land.mp4 */,
 				E22E3E261D4FA74F00069665 /* test.mp4 */,
 				E274773B1D4C6C700080C52C /* short.mp4 */,
 			);
@@ -225,6 +228,7 @@
 				E274771B1D4C633E0080C52C /* Main.storyboard in Resources */,
 				E274772C1D4C64B30080C52C /* AVPlayerView.podspec in Resources */,
 				E274772D1D4C64B30080C52C /* LICENSE in Resources */,
+				E21BA05C1D50985900231D03 /* land.mp4 in Resources */,
 				E274773C1D4C6C700080C52C /* short.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

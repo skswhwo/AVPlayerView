@@ -42,9 +42,14 @@
     [[UISlider appearance] setThumbImage:[UIImage imageNamed:@"video_circle_pressed"] forState:UIControlStateHighlighted];
     
     _gradientLayer = [CAGradientLayer layer];
-    _gradientLayer.frame = self.bottomControlView.bounds;
     [self.bottomControlView.layer insertSublayer:_gradientLayer atIndex:0];
     _gradientLayer.colors = @[(id)[[UIColor blackColor] colorWithAlphaComponent:0].CGColor,(id)[[UIColor blackColor] colorWithAlphaComponent:0.54].CGColor];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _gradientLayer.frame = self.bottomControlView.bounds;
 }
 
 #pragma mark - Setter

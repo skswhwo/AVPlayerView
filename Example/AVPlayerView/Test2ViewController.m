@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp4"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"land" ofType:@"mp4"];
     [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
     [self valueChanged:nil];
     [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
