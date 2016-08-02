@@ -20,7 +20,6 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 @property (nonatomic, assign) BOOL autoplay;
 @property (nonatomic, assign) BOOL dimmedEffect;
 @property (nonatomic, assign) BOOL pauseWhenDisappear;  //default: true
-@property (nonatomic, assign) BOOL playWhenAppear;      //default: true (require autoplay)
 @property (nonatomic, assign) BOOL showControl;
 
 @property (nonatomic, strong) UIColor *backgroundColorForFullSize; //default: black

@@ -37,7 +37,6 @@ self.avPlayerView.autoplay      = YES;
 self.avPlayerView.loop          = YES;
 self.avPlayerView.dimmedEffect  = YES;
 self.pauseWhenDisappear         = YES;                  //default: true
-self.playWhenAppear             = YES;                  //default: true (require autoplay)
 self.avPlayerView.showControl   = NO;                   //default: true
 self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 

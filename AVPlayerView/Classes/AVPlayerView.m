@@ -56,7 +56,6 @@ AVPlayerContentViewDelegate>
     previousWindowLevel     = [[UIApplication sharedApplication] keyWindow].windowLevel;
     self.dimmedEffect       = true;
     self.pauseWhenDisappear = true;
-    self.playWhenAppear     = true;
     self.backgroundColorForFullSize = [UIColor blackColor];
 }
 - (void)initializePlayer
@@ -92,7 +91,7 @@ AVPlayerContentViewDelegate>
     if (self.didAppear) {
         self.didAppear(self);
     }
-    if (self.playWhenAppear) {
+    if (self.autoplay) {
         [self.playerContentView playVideo];
     }
 }
@@ -172,7 +171,7 @@ AVPlayerContentViewDelegate>
         if (self.didAppear) {
             self.didAppear(self);
         }
-        if (self.autoplay && self.playWhenAppear) {
+        if (self.autoplay) {
             [self.playerContentView playVideo];
         }
     }
@@ -280,63 +279,129 @@ AVPlayerContentViewDelegate>
 - (void)normalSizeMode
 {
     self.isFullSize = NO;
-    [self.playerControlView removeFromSuperview];
     
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = previousWindowLevel;
     [window layoutIfNeeded];
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     
+    [self addSubview:self.playerContentView toSuperView:self edge:UIEdgeInsetsZero];
+    [self addSubview:self.playerControlView toSuperView:self edge:UIEdgeInsetsZero];
+
+    self.playerControlView.alpha = 0;
+
     [UIView animateWithDuration:0.3 animations:^{
         self.playerContentView.frame = rect;
+        self.playerControlView.alpha = 1;
+        
         if (self.dimmedEffect) {
             self.playerContentView.backgroundColor = [UIColor clearColor];
         }
+        self.playerContentView.transform = CGAffineTransformMakeRotation(0);
+        self.playerControlView.transform = CGAffineTransformMakeRotation(0);
+        
     } completion:^(BOOL finished) {
         self.playerContentView.backgroundColor = [UIColor clearColor];
-        [self addSubview:self.playerContentView toSuperView:self];
-        [self addSubview:self.playerControlView toSuperView:self];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     }];
 }
 
 - (void)fullSizeMode
 {
     self.isFullSize = YES;
-    [self.playerControlView removeFromSuperview];
-    
+
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = UIWindowLevelStatusBar;
-    [window addSubview:self.playerContentView];
+    [self addSubview:self.playerContentView toSuperView:window edge:UIEdgeInsetsZero];
+    [self addSubview:self.playerControlView toSuperView:window edge:UIEdgeInsetsZero];
     [window layoutIfNeeded];
 
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.frame = rect;
-    CGRect targetRect = window.bounds;
-    
+    self.playerControlView.alpha = 0;
+
     if (self.dimmedEffect == false) {
         self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
     }
     
     [UIView animateWithDuration:0.3 animations:^{
         
-        self.playerContentView.frame = targetRect;
+        self.playerContentView.frame = window.bounds;
+        self.playerControlView.alpha = 1;
         
         if (self.dimmedEffect) {
             self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
         }
         
     } completion:^(BOOL finished) {
-        [self addSubview:self.playerContentView toSuperView:window];
-        [self addSubview:self.playerControlView toSuperView:window];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }];
 }
 
+- (void)orientationChanged:(NSNotification *)notification
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    UIView *superView = [self.playerContentView superview];
+    
+    if (orientation == UIDeviceOrientationPortrait) {
+
+        [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
+        [self addSubview:self.playerControlView toSuperView:superView edge:UIEdgeInsetsZero];
+
+        [UIView animateWithDuration:0.3 animations:^{
+
+            self.playerContentView.bounds = superView.bounds;
+            self.playerControlView.bounds = superView.bounds;
+            self.playerContentView.transform = CGAffineTransformMakeRotation(0);
+            self.playerControlView.transform = CGAffineTransformMakeRotation(0);
+            
+        } completion:^(BOOL finished) {
+        }];
+
+    } else if (orientation == UIDeviceOrientationLandscapeRight) {
+        
+        float margin = (superView.frame.size.height - superView.frame.size.width)/2;
+        UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
+        [self addSubview:self.playerContentView toSuperView:superView edge:edge];
+        [self addSubview:self.playerControlView toSuperView:superView edge:edge];
+
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
+            self.playerControlView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
+            self.playerContentView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            self.playerControlView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+            
+        } completion:^(BOOL finished) {
+        }];
+
+    } else if (orientation == UIDeviceOrientationLandscapeLeft) {
+        
+        float margin = (superView.frame.size.height - superView.frame.size.width)/2;
+        UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
+        [self addSubview:self.playerContentView toSuperView:superView edge:edge];
+        [self addSubview:self.playerControlView toSuperView:superView edge:edge];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
+            self.playerControlView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
+            self.playerContentView.transform = CGAffineTransformMakeRotation(M_PI_2);
+            self.playerControlView.transform = CGAffineTransformMakeRotation(M_PI_2);
+            
+        } completion:^(BOOL finished) {
+        }];
+    }
+}
+
 #pragma mark - Private
-- (void)addSubview:(UIView *)subView toSuperView:(UIView *)superView
+- (void)addSubview:(UIView *)subView toSuperView:(UIView *)superView edge:(UIEdgeInsets)edge
 {
     if (subView == nil) {
         return;
     }
+    [subView removeFromSuperview];
     [superView addSubview:subView];
     [superView addConstraint:[NSLayoutConstraint constraintWithItem:subView
                                                           attribute:NSLayoutAttributeTop
@@ -344,7 +409,7 @@ AVPlayerContentViewDelegate>
                                                              toItem:superView
                                                           attribute:NSLayoutAttributeTop
                                                          multiplier:1
-                                                           constant:0]];
+                                                           constant:edge.top]];
     
     [superView addConstraint:[NSLayoutConstraint constraintWithItem:subView
                                                           attribute:NSLayoutAttributeBottom
@@ -352,14 +417,14 @@ AVPlayerContentViewDelegate>
                                                              toItem:superView
                                                           attribute:NSLayoutAttributeBottom
                                                          multiplier:1
-                                                           constant:0]];
+                                                           constant:edge.bottom]];
     [superView addConstraint:[NSLayoutConstraint constraintWithItem:subView
                                                           attribute:NSLayoutAttributeLeading
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:superView
                                                           attribute:NSLayoutAttributeLeading
                                                          multiplier:1
-                                                           constant:0]];
+                                                           constant:edge.left]];
     
     [superView addConstraint:[NSLayoutConstraint constraintWithItem:subView
                                                           attribute:NSLayoutAttributeTrailing
@@ -367,7 +432,7 @@ AVPlayerContentViewDelegate>
                                                              toItem:superView
                                                           attribute:NSLayoutAttributeTrailing
                                                          multiplier:1
-                                                           constant:0]];
+                                                           constant:edge.right]];
 }
 
 
