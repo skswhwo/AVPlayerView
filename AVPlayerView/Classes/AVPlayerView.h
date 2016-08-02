@@ -33,6 +33,7 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 - (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack;
 - (void)setDidAppear:(AVPlayerViewCallback)didAppear;
 - (void)setDidDisappear:(AVPlayerViewCallback)didDisappear;
+- (void)setGradientColorsAtBottom:(NSArray *)colors;
 
 #pragma mark - Condition
 - (BOOL)isFullSize;

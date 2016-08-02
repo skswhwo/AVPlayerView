@@ -139,6 +139,11 @@ AVPlayerContentViewDelegate>
     [self.playerControlView setHidden:!showControl];
 }
 
+- (void)setGradientColorsAtBottom:(NSArray *)colors
+{
+    [self.playerControlView setGradientColorsAtBottom:colors];
+}
+
 #pragma mark - View Callback
 - (void)didMoveToWindow
 {

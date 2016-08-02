@@ -18,6 +18,8 @@
 
 + (AVPlayerControlView *)getControlView;
 
+- (void)setGradientColorsAtBottom:(NSArray *)colors;
+
 #pragma mark - Data
 - (void)reloadControlView;
 - (void)updateProgress:(float)time;
