@@ -42,6 +42,7 @@
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="AAA-mY-aau">
                                     <rect key="frame" x="-2" y="16" width="329" height="31"/>
                                     <color key="tintColor" red="0.039215686270000001" green="0.73725490199999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <gestureRecognizers/>
                                     <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <color key="thumbTintColor" red="0.42352941179999998" green="0.84313725490000002" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <connections>
@@ -50,6 +51,7 @@
                                         <action selector="sliderDragFinished:" destination="iN0-l3-epB" eventType="touchUpInside" id="Yfb-fb-ZeV"/>
                                         <action selector="sliderValueChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="o3j-fE-5pm"/>
                                         <action selector="touchDownSlider:" destination="iN0-l3-epB" eventType="touchDown" id="koN-zO-DId"/>
+                                        <outletCollection property="gestureRecognizers" destination="waQ-wN-wIR" appends="YES" id="9ZJ-Fw-fEr"/>
                                     </connections>
                                 </slider>
                             </subviews>
@@ -146,6 +148,7 @@
                 <action selector="pinchAVPlayer:" destination="iN0-l3-epB" id="Roz-ml-16M"/>
             </connections>
         </pinchGestureRecognizer>
+        <panGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="waQ-wN-wIR"/>
     </objects>
     <resources>
         <image name="fullscreen_exit_white" width="24" height="24"/>

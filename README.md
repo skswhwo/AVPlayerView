@@ -78,7 +78,6 @@ self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 
 ```
 
-
 ## Author
 
 skswhwo, skswhwo@gmail.com

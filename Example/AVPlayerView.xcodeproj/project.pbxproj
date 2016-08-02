@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21BA05A1D50397F00231D03 /* Test3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21BA0591D50397F00231D03 /* Test3ViewController.m */; };
 		E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22E3E211D4F518A00069665 /* Test2ViewController.m */; };
 		E22E3E271D4FA74F00069665 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E22E3E261D4FA74F00069665 /* test.mp4 */; };
 		E24E92921D4F0A33002282E9 /* AVPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E92911D4F0A33002282E9 /* AVPlayerControlView.m */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E21BA0581D50397F00231D03 /* Test3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test3ViewController.h; sourceTree = "<group>"; };
+		E21BA0591D50397F00231D03 /* Test3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test3ViewController.m; sourceTree = "<group>"; };
 		E22E3E201D4F518A00069665 /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
 		E22E3E211D4F518A00069665 /* Test2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test2ViewController.m; sourceTree = "<group>"; };
 		E22E3E231D4F5AF900069665 /* AVPlayerViewEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVPlayerViewEnum.h; path = ../AVPlayerView/Classes/AVPlayerViewEnum.h; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				E27477391D4C66540080C52C /* Test1ViewController.m */,
 				E22E3E201D4F518A00069665 /* Test2ViewController.h */,
 				E22E3E211D4F518A00069665 /* Test2ViewController.m */,
+				E21BA0581D50397F00231D03 /* Test3ViewController.h */,
+				E21BA0591D50397F00231D03 /* Test3ViewController.m */,
 				E27477191D4C633E0080C52C /* Main.storyboard */,
 				E274771E1D4C633E0080C52C /* LaunchScreen.storyboard */,
 				E27477211D4C633E0080C52C /* Info.plist */,
@@ -239,6 +244,7 @@
 				E274772E1D4C64B30080C52C /* README.md in Sources */,
 				E274773A1D4C66540080C52C /* Test1ViewController.m in Sources */,
 				E27477341D4C652F0080C52C /* AVPlayerView.m in Sources */,
+				E21BA05A1D50397F00231D03 /* Test3ViewController.m in Sources */,
 				E27477121D4C633E0080C52C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
