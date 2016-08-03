@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-@interface UIScrollView (test)
-@end
-
-
 @interface Test3ViewController : UIViewController
 
 @end

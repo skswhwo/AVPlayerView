@@ -21,6 +21,7 @@ AVPlayerContentViewDelegate>
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (strong, nonatomic) AVPlayerControlView *playerControlView;
+@property (strong, nonatomic) UIView *fullScreenBackgroundView;
 @property (nonatomic, assign) BOOL isFullSize;
 
 @end
@@ -60,6 +61,10 @@ AVPlayerContentViewDelegate>
 }
 - (void)initializePlayer
 {
+    _fullScreenBackgroundView = [[UIView alloc] init];
+    _fullScreenBackgroundView.backgroundColor = [UIColor blackColor];
+    [_fullScreenBackgroundView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     _playerContentView = [[AVPlayerContentView alloc] init];
     _playerContentView.delegate = self;
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -285,6 +290,7 @@ AVPlayerContentViewDelegate>
     [window layoutIfNeeded];
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     
+    [self.fullScreenBackgroundView removeFromSuperview];
     [self addSubview:self.playerContentView toSuperView:self edge:UIEdgeInsetsZero];
     [self addSubview:self.playerControlView toSuperView:self edge:UIEdgeInsetsZero];
 
@@ -335,15 +341,21 @@ AVPlayerContentViewDelegate>
         }
         
     } completion:^(BOOL finished) {
+        [self addSubview:self.fullScreenBackgroundView toSuperView:window edge:UIEdgeInsetsZero];
+        [window insertSubview:self.fullScreenBackgroundView belowSubview:self.playerContentView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }];
 }
 
 - (void)orientationChanged:(NSNotification *)notification
 {
+    if ([self needToForceChangeOrientation] == false) {
+        [self rallbackScreenIfNeeded];
+        return;
+    }
+    
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     UIView *superView = [self.playerContentView superview];
-    
     if (orientation == UIDeviceOrientationPortrait) {
 
         [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
@@ -435,6 +447,42 @@ AVPlayerContentViewDelegate>
                                                            constant:edge.right]];
 }
 
+- (void)rallbackScreenIfNeeded
+{
+    CGFloat angle = [self getViewAngle];
+    if (angle != 0) {
+        UIView *superView = [self.playerContentView superview];
+        [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
+        [self addSubview:self.playerControlView toSuperView:superView edge:UIEdgeInsetsZero];
+        self.playerContentView.transform = CGAffineTransformMakeRotation(0);
+        self.playerControlView.transform = CGAffineTransformMakeRotation(0);
+    }
+}
+
+- (BOOL)needToForceChangeOrientation
+{
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if (orientation == UIDeviceOrientationPortrait) {
+        CGFloat angle = [self getViewAngle];
+        if (angle == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+- (CGFloat)getViewAngle
+{
+    CGFloat radians = atan2f(self.playerContentView.transform.b, self.playerContentView.transform.a);
+    return radians * (180 / M_PI);
+}
 
 //- (void)addAnimationInLayer:(CALayer *)layer
 //{

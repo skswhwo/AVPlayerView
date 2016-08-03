@@ -45,20 +45,4 @@
     self.avPlayerView.dimmedEffect  = self.dimmedEffectSwitch.on;
 }
 
-//-touches
-//-(BOOL)touchesShouldCancelInContentView:(UIView *)view
-//{
-//    NSLog(@"er");
-//    return YES;
-//}
-
-@end
-
-@implementation UIScrollView (test)
-
-- (BOOL)touchesShouldCancelInContentView:(UIView *)view
-{
-    NSLog(@"view  %@",view);
-    return YES;
-}
 @end
