@@ -19,7 +19,6 @@ AVPlayerContentViewDelegate>
     UIWindowLevel previousWindowLevel;
 }
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
-@property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (strong, nonatomic) AVPlayerControlView *playerControlView;
 @property (strong, nonatomic) UIView *fullScreenBackgroundView;
 @property (nonatomic, assign) BOOL isFullSize;
@@ -113,8 +112,9 @@ AVPlayerContentViewDelegate>
 #pragma mark - Trigger
 - (void)playerWithContentURL:(NSURL *)url
 {
-    self.playerItem =[AVPlayerItem playerItemWithURL:url];
-    [self.playerContentView playerWithPlayerItem:[AVPlayerItem playerItemWithURL:url] time:kCMTimeZero];
+    AVPlayerItem *playerItem =[AVPlayerItem playerItemWithURL:url];
+    [self.playerContentView playerWithPlayerItem:playerItem time:kCMTimeZero];
+    [self.playerControlView setPlayerItem:playerItem];
     if (self.showControl) {
         [self.playerControlView reloadControlView];
         [self.playerControlView updateProgress:0];
@@ -211,12 +211,6 @@ AVPlayerContentViewDelegate>
 {
     return (self.isFullSize?AVPlayerViewModeFullSize:AVPlayerViewModeNormal);
 
-}
-
-- (float)totalDurationForControlView:(AVPlayerControlView *)controlView
-{
-    AVAsset *asset = [self.playerItem asset];
-    return CMTimeGetSeconds(asset.duration);
 }
 
 - (void)controlViewClicked:(AVPlayerControlView *)controlView

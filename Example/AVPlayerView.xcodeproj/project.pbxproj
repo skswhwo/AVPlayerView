@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2063FD51D51984A0054CDFA /* Test4ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2063FD41D51984A0054CDFA /* Test4ViewController.m */; };
+		E2063FD81D51B8350054CDFA /* VideoDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = E2063FD71D51B8350054CDFA /* VideoDownloader.m */; };
 		E21BA05A1D50397F00231D03 /* Test3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E21BA0591D50397F00231D03 /* Test3ViewController.m */; };
 		E21BA05C1D50985900231D03 /* land.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E21BA05B1D50982300231D03 /* land.mp4 */; };
 		E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22E3E211D4F518A00069665 /* Test2ViewController.m */; };
@@ -29,6 +31,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E2063FD31D51984A0054CDFA /* Test4ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test4ViewController.h; sourceTree = "<group>"; };
+		E2063FD41D51984A0054CDFA /* Test4ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test4ViewController.m; sourceTree = "<group>"; };
+		E2063FD61D51B8350054CDFA /* VideoDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoDownloader.h; path = ../AVPlayerView/Classes/VideoDownloader.h; sourceTree = "<group>"; };
+		E2063FD71D51B8350054CDFA /* VideoDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoDownloader.m; path = ../AVPlayerView/Classes/VideoDownloader.m; sourceTree = "<group>"; };
 		E21BA0581D50397F00231D03 /* Test3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test3ViewController.h; sourceTree = "<group>"; };
 		E21BA0591D50397F00231D03 /* Test3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test3ViewController.m; sourceTree = "<group>"; };
 		E21BA05B1D50982300231D03 /* land.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = land.mp4; sourceTree = "<group>"; };
@@ -114,6 +120,8 @@
 				E22E3E211D4F518A00069665 /* Test2ViewController.m */,
 				E21BA0581D50397F00231D03 /* Test3ViewController.h */,
 				E21BA0591D50397F00231D03 /* Test3ViewController.m */,
+				E2063FD31D51984A0054CDFA /* Test4ViewController.h */,
+				E2063FD41D51984A0054CDFA /* Test4ViewController.m */,
 				E27477191D4C633E0080C52C /* Main.storyboard */,
 				E274771E1D4C633E0080C52C /* LaunchScreen.storyboard */,
 				E27477211D4C633E0080C52C /* Info.plist */,
@@ -143,6 +151,8 @@
 		E27477281D4C64990080C52C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E2063FD61D51B8350054CDFA /* VideoDownloader.h */,
+				E2063FD71D51B8350054CDFA /* VideoDownloader.m */,
 				E22E3E231D4F5AF900069665 /* AVPlayerViewEnum.h */,
 				E27477311D4C652F0080C52C /* AVPlayerView.h */,
 				E27477321D4C652F0080C52C /* AVPlayerView.m */,
@@ -246,9 +256,11 @@
 				E22E3E221D4F518A00069665 /* Test2ViewController.m in Sources */,
 				E27477151D4C633E0080C52C /* AppDelegate.m in Sources */,
 				E274772E1D4C64B30080C52C /* README.md in Sources */,
+				E2063FD51D51984A0054CDFA /* Test4ViewController.m in Sources */,
 				E274773A1D4C66540080C52C /* Test1ViewController.m in Sources */,
 				E27477341D4C652F0080C52C /* AVPlayerView.m in Sources */,
 				E21BA05A1D50397F00231D03 /* Test3ViewController.m in Sources */,
+				E2063FD81D51B8350054CDFA /* VideoDownloader.m in Sources */,
 				E27477121D4C633E0080C52C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

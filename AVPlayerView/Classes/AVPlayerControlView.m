@@ -12,6 +12,8 @@
 {
     NSTimer *hideTimer;
     CAGradientLayer *_gradientLayer;
+    
+    dispatch_once_t once;
 }
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) IBOutlet UIView *bottomControlView;
@@ -61,15 +63,48 @@
 #pragma mark - Content
 - (void)reloadControlView
 {
-    float endTime = [self.delegate totalDurationForControlView:self];
-    self.endTimeLabel.text = [self getFormattedTime:endTime];
-    if (!isnan(endTime)) {
-        self.timeSlider.maximumValue = endTime;
-    }
-    
+    [self updateDuration];
+    [self updateActionButton];
+    [self updateBottomControlView];
+}
+
+- (void)updateDuration
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (self.playerItem) {
+            
+            dispatch_once(&once, ^{
+                [self updateDurationOnMainThread:0];
+                AVURLAsset *asset = (AVURLAsset *)[self.playerItem asset];
+                float duration = CMTimeGetSeconds(asset.duration);
+                if (!isnan(duration)) {
+                    [self updateDurationOnMainThread:duration];
+                }
+            });
+            
+        } else {
+            once = 0;
+            [self updateDurationOnMainThread:0];
+        }
+    });
+}
+
+- (void)updateDurationOnMainThread:(float)duration
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.timeSlider.maximumValue = duration;
+        self.endTimeLabel.text = [self getFormattedTime:(duration == 0?-1:duration)];
+    });
+}
+
+- (void)updateActionButton
+{
     AVPlayerState state = [self.delegate currentControlStateForControlView:self];
     [self.actionButton setImage:[self getImageForState:state] forState:UIControlStateNormal];
-    
+}
+
+- (void)updateBottomControlView
+{
     AVPlayerViewMode viewMode = [self.delegate currentViewModeForControlView:self];
     switch (viewMode) {
         case AVPlayerViewModeNormal:
@@ -220,6 +255,8 @@
 
 - (NSString *)getFormattedTime:(float)time
 {
+    if (time == -1) return @"--:--";
+    
     NSDateComponentsFormatter *dcFormatter = [[NSDateComponentsFormatter alloc] init];
     dcFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorNone;
     dcFormatter.allowedUnits = NSCalendarUnitMinute | NSCalendarUnitSecond;

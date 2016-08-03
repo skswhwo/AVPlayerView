@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AVPlayerViewEnum.h"
+#import <AVFoundation/AVFoundation.h>
 
 @protocol AVPlayerControlViewDelegate;
 
@@ -15,6 +16,7 @@
 
 @property (nonatomic, weak) id <AVPlayerControlViewDelegate> delegate;
 @property (nonatomic, assign) BOOL needToAutoPlay;
+@property (nonatomic, strong) AVPlayerItem *playerItem;
 
 + (AVPlayerControlView *)getControlView;
 
@@ -33,7 +35,6 @@
 @protocol AVPlayerControlViewDelegate <NSObject>
 
 @required
-- (float)totalDurationForControlView:(AVPlayerControlView *)controlView;
 - (AVPlayerState)currentControlStateForControlView:(AVPlayerControlView *)controlView;
 - (AVPlayerViewMode)currentViewModeForControlView:(AVPlayerControlView *)controlView;
 - (void)actionButtonClickedAtControlView:(AVPlayerControlView *)controlView;
