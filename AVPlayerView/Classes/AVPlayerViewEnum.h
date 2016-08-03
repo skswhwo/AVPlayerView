@@ -3,6 +3,7 @@ typedef enum
 {
     AVPlayerStatePlay,
     AVPlayerStatePause,
+    AVPlayerStateBuffering,
     AVPlayerStateFinish
 }AVPlayerState;
 

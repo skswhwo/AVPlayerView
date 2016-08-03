@@ -188,6 +188,8 @@ AVPlayerContentViewDelegate>
     [self.playerControlView reloadControlView];
     if (self.showControl && state == AVPlayerStateFinish) {
         [self.playerControlView showControlView];
+    } else if (state == AVPlayerStateBuffering) {
+        [self.playerControlView showControlView];
     }
 }
 - (void)playerContentView:(AVPlayerContentView *)contentView progressChanged:(float)timeValue
@@ -198,13 +200,7 @@ AVPlayerContentViewDelegate>
 #pragma mark - AVControlView Delegate
 - (AVPlayerState)currentControlStateForControlView:(AVPlayerControlView *)controlView
 {
-    if ([self.playerContentView isPlaying]) {
-        return AVPlayerStatePlay;
-    } else if ([self.playerContentView isFinished]) {
-        return AVPlayerStateFinish;
-    } else {
-        return AVPlayerStatePause;
-    }
+    return [self.playerContentView getCurrentState];
 }
 
 - (AVPlayerViewMode)currentViewModeForControlView:(AVPlayerControlView *)controlView
@@ -222,12 +218,18 @@ AVPlayerContentViewDelegate>
 
 - (void)controlView:(AVPlayerControlView *)controlView beginValueChanged:(float)time
 {
-    if ([self.playerContentView isPlaying]) {
-        [self.playerContentView pauseVideo];
-        controlView.needToAutoPlay = true;
-    } else {
-        controlView.needToAutoPlay = false;
-        [controlView reloadControlView];
+    AVPlayerState state = [self.playerContentView getCurrentState];
+    switch (state) {
+        case AVPlayerStatePlay:
+        case AVPlayerStateBuffering:
+            [self.playerContentView pauseVideo];
+            controlView.needToAutoPlay = true;
+            break;
+        case AVPlayerStatePause:
+        case AVPlayerStateFinish:
+            controlView.needToAutoPlay = false;
+            [controlView reloadControlView];
+            break;
     }
 }
 
@@ -240,18 +242,27 @@ AVPlayerContentViewDelegate>
 {
     [self.playerContentView seekToTime:time];
     if (controlView.needToAutoPlay) {
-        [self.playerContentView playVideo];
+        if ([self.playerContentView canPlayImmediately]) {
+            [self.playerContentView playVideo];
+        } else {
+            [self.playerContentView bufferingVideo];
+        }
+        [controlView reloadControlView];
     }
 }
 
 - (void)actionButtonClickedAtControlView:(AVPlayerControlView *)controlView
 {
-    if ([self.playerContentView isPlaying]) {
-        [self.playerContentView pauseVideo];
-    } else if ([self.playerContentView isFinished]) {
-        [self.playerContentView playVideo];
-    } else {
-        [self.playerContentView playVideo];
+    AVPlayerState state = [self.playerContentView getCurrentState];
+    switch (state) {
+        case AVPlayerStatePlay:
+        case AVPlayerStateBuffering:
+            [self.playerContentView pauseVideo];
+            break;
+        case AVPlayerStatePause:
+        case AVPlayerStateFinish:
+            [self.playerContentView playVideo];
+            break;
     }
     [controlView reloadControlView];
 }

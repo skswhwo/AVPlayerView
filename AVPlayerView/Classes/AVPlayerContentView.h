@@ -31,10 +31,11 @@
 - (void)seekToTime:(float)time;
 - (void)playVideo;
 - (void)pauseVideo;
+- (void)bufferingVideo;
 
 #pragma mark - Condition
-- (BOOL)isPlaying;
-- (BOOL)isFinished;
+- (AVPlayerState)getCurrentState;
+- (BOOL)canPlayImmediately;
 
 @end
 

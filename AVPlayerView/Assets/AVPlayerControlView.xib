@@ -33,7 +33,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJs-Hu-06M" userLabel="ProgressView">
                             <rect key="frame" x="64" y="0.0" width="325" height="48"/>
                             <subviews>
-                                <progressView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="nAO-rq-89S">
+                                <progressView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nAO-rq-89S">
                                     <rect key="frame" x="0.0" y="23" width="325" height="2"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

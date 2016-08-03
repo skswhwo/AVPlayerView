@@ -7,6 +7,7 @@
 //
 
 #import "AVPlayerControlView.h"
+#import "BufferSpinnerView.h"
 
 @interface AVPlayerControlView ()
 {
@@ -14,6 +15,8 @@
     CAGradientLayer *_gradientLayer;
     
     dispatch_once_t once;
+    
+    BufferSpinnerView *spinnerView;
 }
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (weak, nonatomic) IBOutlet UIView *bottomControlView;
@@ -36,6 +39,11 @@
     return view;
 }
 
+- (void)dealloc
+{
+    [self removeObserver];
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -46,6 +54,10 @@
     _gradientLayer = [CAGradientLayer layer];
     [self.bottomControlView.layer insertSublayer:_gradientLayer atIndex:0];
     _gradientLayer.colors = @[(id)[[UIColor blackColor] colorWithAlphaComponent:0].CGColor,(id)[[UIColor blackColor] colorWithAlphaComponent:0.54].CGColor];
+    
+    spinnerView = [[BufferSpinnerView alloc] initWithFrame:self.actionButton.bounds];
+    [self.actionButton addSubview:spinnerView];
+    [spinnerView stopAnimating];
 }
 
 - (void)layoutSubviews
@@ -55,9 +67,27 @@
 }
 
 #pragma mark - Setter
+- (void)setPlayerItem:(AVPlayerItem *)playerItem
+{
+    [self removeObserver];
+    _playerItem = playerItem;
+    [self updateDownloadProgress];
+    [_playerItem addObserver:self
+                  forKeyPath:@"loadedTimeRanges"
+                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                     context:nil];
+}
 - (void)setGradientColorsAtBottom:(NSArray *)colors
 {
     _gradientLayer.colors = colors;
+}
+
+#pragma mark - Observer 
+- (void)observeValueForKeyPath:(NSString*)path ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+    if ([path isEqualToString:@"loadedTimeRanges"]) {
+        [self updateDownloadProgress];
+    }
 }
 
 #pragma mark - Content
@@ -101,6 +131,11 @@
 {
     AVPlayerState state = [self.delegate currentControlStateForControlView:self];
     [self.actionButton setImage:[self getImageForState:state] forState:UIControlStateNormal];
+    if (state == AVPlayerStateBuffering) {
+        [spinnerView startAnimating];
+    } else {
+        [spinnerView stopAnimating];
+    }
 }
 
 - (void)updateBottomControlView
@@ -120,6 +155,16 @@
 {
     self.timeSlider.value = time;
     self.currentTimeLabel.text = [self getFormattedTime:time];
+}
+
+- (void)updateDownloadProgress
+{
+    CMTime availbelCMTime = [self getAvailableDuration];
+    float availableTime = CMTimeGetSeconds(availbelCMTime);
+    float totalTime     = CMTimeGetSeconds(self.playerItem.duration);
+    if (isnan(totalTime) == false) {
+        self.progressView.progress = availableTime/totalTime;
+    }
 }
 
 #pragma mark - IBAction
@@ -243,6 +288,8 @@
             return [UIImage imageNamed:@"video_pause_white"];
         case AVPlayerStatePause:
             return [UIImage imageNamed:@"video_play_white"];
+        case AVPlayerStateBuffering:
+            return [UIImage new];
         case AVPlayerStateFinish:
             return [UIImage imageNamed:@"video_replay_white"];
     }
@@ -265,6 +312,22 @@
     }
     dcFormatter.unitsStyle = NSDateComponentsFormatterUnitsStylePositional;
     return [dcFormatter stringFromTimeInterval:time];
+}
+
+- (void)removeObserver
+{
+    if (_playerItem) {
+        [_playerItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+    }
+}
+
+- (CMTime)getAvailableDuration
+{
+    NSValue *range = self.playerItem.loadedTimeRanges.firstObject;
+    if (range != nil){
+        return CMTimeRangeGetEnd(range.CMTimeRangeValue);
+    }
+    return kCMTimeZero;
 }
 
 @end

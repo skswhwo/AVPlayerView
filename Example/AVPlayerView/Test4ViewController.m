@@ -8,7 +8,6 @@
 
 #import "Test4ViewController.h"
 #import "AVPlayerView.h"
-#import "VideoDownloader.h"
 
 @interface Test4ViewController ()
 
@@ -26,7 +25,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSURL *url = [NSURL URLWithString:@"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/400mb.mp4"];
+//    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test.mp4";  //small short
+    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/400mb.mp4";   //large short
+//    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test3.mp4";   //small long
+    NSURL *url = [NSURL URLWithString:urlString];
     [self.avPlayerView playerWithContentURL:url];
     [self valueChanged:nil];
     [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
@@ -37,10 +39,6 @@
     [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
         //do something;
     }];
-    
-//    VideoDownloader *downloader = [VideoDownloader new];
-//    [downloader checkHeader:url];
-
 }
 
 - (IBAction)valueChanged:(id)sender
