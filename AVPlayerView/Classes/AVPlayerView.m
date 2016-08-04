@@ -126,6 +126,7 @@
 
 #pragma mark - Setter
 - (void)setLoop:(BOOL)loop {
+    _loop = loop;
     self.playerContentView.loop = loop;
 }
 
@@ -137,6 +138,7 @@
 }
 
 - (void)setShowControl:(BOOL)showControl {
+    _showControl = showControl;
     [self.playerContentView setShowControl:showControl];
 }
 
