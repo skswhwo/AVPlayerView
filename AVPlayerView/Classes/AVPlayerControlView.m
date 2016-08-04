@@ -153,8 +153,10 @@
 
 - (void)updateProgress:(float)time
 {
-    self.timeSlider.value = time;
-    self.currentTimeLabel.text = [self getFormattedTime:time];
+    if (isnan(time) == false) {
+        self.timeSlider.value = time;
+        self.currentTimeLabel.text = [self getFormattedTime:time];
+    }
 }
 
 - (void)updateDownloadProgress

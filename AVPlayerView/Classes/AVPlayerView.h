@@ -18,9 +18,9 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 
 @property (nonatomic, assign) BOOL loop;
 @property (nonatomic, assign) BOOL autoplay;
+@property (nonatomic, assign) BOOL showControl;
 @property (nonatomic, assign) BOOL dimmedEffect;
 @property (nonatomic, assign) BOOL pauseWhenDisappear;  //default: true
-@property (nonatomic, assign) BOOL showControl;
 
 @property (nonatomic, strong) UIColor *backgroundColorForFullSize; //default: black
 
@@ -32,6 +32,7 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 - (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack;
 - (void)setDidAppear:(AVPlayerViewCallback)didAppear;
 - (void)setDidDisappear:(AVPlayerViewCallback)didDisappear;
+
 - (void)setGradientColorsAtBottom:(NSArray *)colors;
 
 #pragma mark - Condition

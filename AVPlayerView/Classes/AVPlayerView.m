@@ -11,17 +11,14 @@
 #import "AVPlayerControlView.h"
 
 @interface AVPlayerView ()
-<AVPlayerControlViewDelegate,
-AVPlayerContentViewDelegate>
+<AVPlayerContentViewDelegate>
 {
     BOOL didAppearFlag;
     
     UIWindowLevel previousWindowLevel;
 }
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
-@property (strong, nonatomic) AVPlayerControlView *playerControlView;
 @property (strong, nonatomic) UIView *fullScreenBackgroundView;
-@property (nonatomic, assign) BOOL isFullSize;
 
 @end
 
@@ -67,11 +64,16 @@ AVPlayerContentViewDelegate>
     _playerContentView = [[AVPlayerContentView alloc] init];
     _playerContentView.delegate = self;
     [_playerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    self.playerControlView = [AVPlayerControlView getControlView];
-    self.playerControlView.delegate = self;
-    [self setShowControl:YES];
-    [self.playerControlView updateProgress:0];
+
+    UIImageView *imageView = [[UIImageView alloc] init];
+    [imageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [imageView setContentMode:UIViewContentModeScaleAspectFit];
+    [self addSubview:imageView toSuperView:_playerContentView edge:UIEdgeInsetsZero];
+    _playerContentView.thumbnailView = imageView;
+
+    AVPlayerControlView *controlView = [AVPlayerControlView getControlView];
+    [self addSubview:controlView toSuperView:_playerContentView edge:UIEdgeInsetsZero];
+    _playerContentView.controlView = controlView;
 }
 
 #pragma mark - Notifiation
@@ -114,38 +116,32 @@ AVPlayerContentViewDelegate>
 {
     AVPlayerItem *playerItem =[AVPlayerItem playerItemWithURL:url];
     [self.playerContentView playerWithPlayerItem:playerItem time:kCMTimeZero];
-    [self.playerControlView setPlayerItem:playerItem];
-    if (self.showControl) {
-        [self.playerControlView reloadControlView];
-        [self.playerControlView updateProgress:0];
+    
+    if (self.autoplay) {
+        [self.playerContentView playVideo];
+    } else if ([[url scheme] hasPrefix:@"http"]) {
+        [self.playerContentView stopVideo];
     }
 }
 
 #pragma mark - Setter
-- (void)setLoop:(BOOL)loop
-{
-    _loop = loop;
+- (void)setLoop:(BOOL)loop {
     self.playerContentView.loop = loop;
 }
 
-- (void)setAutoplay:(BOOL)autoplay
-{
+- (void)setAutoplay:(BOOL)autoplay {
     _autoplay = autoplay;
-    self.playerContentView.autoplay = autoplay;
     if (autoplay) {
         [self.playerContentView playVideo];
     }
 }
 
-- (void)setShowControl:(BOOL)showControl
-{
-    _showControl = showControl;
-    [self.playerControlView setHidden:!showControl];
+- (void)setShowControl:(BOOL)showControl {
+    [self.playerContentView setShowControl:showControl];
 }
 
-- (void)setGradientColorsAtBottom:(NSArray *)colors
-{
-    [self.playerControlView setGradientColorsAtBottom:colors];
+- (void)setGradientColorsAtBottom:(NSArray *)colors {
+    [self.playerContentView setGradientColorsAtBottom:colors];
 }
 
 #pragma mark - View Callback
@@ -165,7 +161,7 @@ AVPlayerContentViewDelegate>
             self.didDisappear(self);
         }
         if (self.pauseWhenDisappear) {
-            [self.playerContentView pauseVideo];
+            [self.playerContentView stopVideo];
         }
     }
 }
@@ -182,99 +178,20 @@ AVPlayerContentViewDelegate>
     }
 }
 
-#pragma mark - AVContentView Delegate
-- (void)playerContentView:(AVPlayerContentView *)contentView stateChanged:(AVPlayerState)state
-{
-    [self.playerControlView reloadControlView];
-    if (self.showControl && state == AVPlayerStateFinish) {
-        [self.playerControlView showControlView];
-    } else if (state == AVPlayerStateBuffering) {
-        [self.playerControlView showControlView];
-    }
-}
-- (void)playerContentView:(AVPlayerContentView *)contentView progressChanged:(float)timeValue
-{
-    [self.playerControlView updateProgress:timeValue];
-}
-
-#pragma mark - AVControlView Delegate
-- (AVPlayerState)currentControlStateForControlView:(AVPlayerControlView *)controlView
-{
-    return [self.playerContentView getCurrentState];
-}
-
-- (AVPlayerViewMode)currentViewModeForControlView:(AVPlayerControlView *)controlView
-{
-    return (self.isFullSize?AVPlayerViewModeFullSize:AVPlayerViewModeNormal);
-
-}
-
-- (void)controlViewClicked:(AVPlayerControlView *)controlView
+#pragma mark - AVPlayerView Delegate
+- (void)playerViewClicked
 {
     if (self.tapCallBack) {
         self.tapCallBack(self);
     }
 }
-
-- (void)controlView:(AVPlayerControlView *)controlView beginValueChanged:(float)time
+- (void)playerViewChangeToFullScreen
 {
-    AVPlayerState state = [self.playerContentView getCurrentState];
-    switch (state) {
-        case AVPlayerStatePlay:
-        case AVPlayerStateBuffering:
-            [self.playerContentView pauseVideo];
-            controlView.needToAutoPlay = true;
-            break;
-        case AVPlayerStatePause:
-        case AVPlayerStateFinish:
-            controlView.needToAutoPlay = false;
-            [controlView reloadControlView];
-            break;
-    }
+    [self fullSizeMode];
 }
-
-- (void)controlView:(AVPlayerControlView *)controlView timeValueChanged:(float)time
+- (void)playerViewChangeToNormalScreen
 {
-    [self.playerContentView seekToTime:time];
-}
-
-- (void)controlView:(AVPlayerControlView *)controlView finishValueChanged:(float)time
-{
-    [self.playerContentView seekToTime:time];
-    if (controlView.needToAutoPlay) {
-        if ([self.playerContentView canPlayImmediately]) {
-            [self.playerContentView playVideo];
-        } else {
-            [self.playerContentView bufferingVideo];
-        }
-        [controlView reloadControlView];
-    }
-}
-
-- (void)actionButtonClickedAtControlView:(AVPlayerControlView *)controlView
-{
-    AVPlayerState state = [self.playerContentView getCurrentState];
-    switch (state) {
-        case AVPlayerStatePlay:
-        case AVPlayerStateBuffering:
-            [self.playerContentView pauseVideo];
-            break;
-        case AVPlayerStatePause:
-        case AVPlayerStateFinish:
-            [self.playerContentView playVideo];
-            break;
-    }
-    [controlView reloadControlView];
-}
-
-- (void)controlView:(AVPlayerControlView *)controlView viewModeClicked:(AVPlayerViewMode)viewMode
-{
-    if (AVPlayerViewModeNormal == viewMode) {
-        [self fullSizeMode];
-    } else {
-        [self normalSizeMode];
-    }
-    [controlView reloadControlView];
+    [self normalSizeMode];
 }
 
 #pragma mark - Action
@@ -288,49 +205,42 @@ AVPlayerContentViewDelegate>
 }
 - (void)normalSizeMode
 {
-    self.isFullSize = NO;
+    self.playerContentView.isFullSize = NO;
     
+    [self.fullScreenBackgroundView removeFromSuperview];
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = previousWindowLevel;
     [window layoutIfNeeded];
-    CGRect rect = [self.superview convertRect:self.frame toView:window];
-    
-    [self.fullScreenBackgroundView removeFromSuperview];
-    [self addSubview:self.playerContentView toSuperView:self edge:UIEdgeInsetsZero];
-    [self addSubview:self.playerControlView toSuperView:self edge:UIEdgeInsetsZero];
-
-    self.playerControlView.alpha = 0;
-
+    CGRect targetRect = [self.superview convertRect:self.frame toView:window];
+    self.playerContentView.controlView.alpha = 0;
     [UIView animateWithDuration:0.3 animations:^{
-        self.playerContentView.frame = rect;
-        self.playerControlView.alpha = 1;
         
+        self.playerContentView.frame = targetRect;
         if (self.dimmedEffect) {
             self.playerContentView.backgroundColor = [UIColor clearColor];
         }
         self.playerContentView.transform = CGAffineTransformMakeRotation(0);
-        self.playerControlView.transform = CGAffineTransformMakeRotation(0);
         
     } completion:^(BOOL finished) {
         self.playerContentView.backgroundColor = [UIColor clearColor];
-        
+        self.playerContentView.controlView.alpha = 1;
+        [self addSubview:self.playerContentView toSuperView:self edge:UIEdgeInsetsZero];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     }];
 }
 
 - (void)fullSizeMode
 {
-    self.isFullSize = YES;
+    self.playerContentView.isFullSize = YES;
 
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = UIWindowLevelStatusBar;
     [self addSubview:self.playerContentView toSuperView:window edge:UIEdgeInsetsZero];
-    [self addSubview:self.playerControlView toSuperView:window edge:UIEdgeInsetsZero];
     [window layoutIfNeeded];
 
     CGRect rect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.frame = rect;
-    self.playerControlView.alpha = 0;
+    self.playerContentView.controlView.alpha = 0;
 
     if (self.dimmedEffect == false) {
         self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
@@ -339,13 +249,13 @@ AVPlayerContentViewDelegate>
     [UIView animateWithDuration:0.3 animations:^{
         
         self.playerContentView.frame = window.bounds;
-        self.playerControlView.alpha = 1;
         
         if (self.dimmedEffect) {
             self.playerContentView.backgroundColor = self.backgroundColorForFullSize;
         }
         
     } completion:^(BOOL finished) {
+        self.playerContentView.controlView.alpha = 1;
         [self addSubview:self.fullScreenBackgroundView toSuperView:window edge:UIEdgeInsetsZero];
         [window insertSubview:self.fullScreenBackgroundView belowSubview:self.playerContentView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -364,14 +274,11 @@ AVPlayerContentViewDelegate>
     if (orientation == UIDeviceOrientationPortrait) {
 
         [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
-        [self addSubview:self.playerControlView toSuperView:superView edge:UIEdgeInsetsZero];
 
         [UIView animateWithDuration:0.3 animations:^{
 
             self.playerContentView.bounds = superView.bounds;
-            self.playerControlView.bounds = superView.bounds;
             self.playerContentView.transform = CGAffineTransformMakeRotation(0);
-            self.playerControlView.transform = CGAffineTransformMakeRotation(0);
             
         } completion:^(BOOL finished) {
         }];
@@ -381,14 +288,11 @@ AVPlayerContentViewDelegate>
         float margin = (superView.frame.size.height - superView.frame.size.width)/2;
         UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
         [self addSubview:self.playerContentView toSuperView:superView edge:edge];
-        [self addSubview:self.playerControlView toSuperView:superView edge:edge];
 
         [UIView animateWithDuration:0.3 animations:^{
             
             self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
-            self.playerControlView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
             self.playerContentView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-            self.playerControlView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             
         } completion:^(BOOL finished) {
         }];
@@ -398,18 +302,21 @@ AVPlayerContentViewDelegate>
         float margin = (superView.frame.size.height - superView.frame.size.width)/2;
         UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
         [self addSubview:self.playerContentView toSuperView:superView edge:edge];
-        [self addSubview:self.playerControlView toSuperView:superView edge:edge];
         
         [UIView animateWithDuration:0.3 animations:^{
             
             self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
-            self.playerControlView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
             self.playerContentView.transform = CGAffineTransformMakeRotation(M_PI_2);
-            self.playerControlView.transform = CGAffineTransformMakeRotation(M_PI_2);
             
         } completion:^(BOOL finished) {
         }];
     }
+}
+
+#pragma mark - Condition
+- (BOOL)isFullSize
+{
+    return self.playerContentView.isFullSize;
 }
 
 #pragma mark - Private
@@ -458,9 +365,7 @@ AVPlayerContentViewDelegate>
     if (angle != 0) {
         UIView *superView = [self.playerContentView superview];
         [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
-        [self addSubview:self.playerControlView toSuperView:superView edge:UIEdgeInsetsZero];
         self.playerContentView.transform = CGAffineTransformMakeRotation(0);
-        self.playerControlView.transform = CGAffineTransformMakeRotation(0);
     }
 }
 

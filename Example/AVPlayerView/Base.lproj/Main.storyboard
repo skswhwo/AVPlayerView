@@ -122,7 +122,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="i8J-0W-58W">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i8J-0W-58W">
                                 <rect key="frame" x="198" y="364" width="51" height="31"/>
                                 <connections>
                                     <action selector="valueChanged:" destination="sif-us-5Ok" eventType="valueChanged" id="bh2-ru-9Qz"/>
@@ -540,6 +540,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nWO-rS-W3p"/>
+        <segue reference="Gak-EQ-VfU"/>
     </inferredMetricsTieBreakers>
 </document>
