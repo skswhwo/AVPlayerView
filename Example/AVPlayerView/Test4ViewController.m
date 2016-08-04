@@ -28,6 +28,8 @@
 //    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test.mp4";  //small short
 //    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/400mb.mp4";   //large short
     NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test3.mp4";   //small long
+    
+//    AVPlayerView *playerView  = [[AVPlayerView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
     NSURL *url = [NSURL URLWithString:urlString];
     [self.avPlayerView playerWithContentURL:url];
     [self valueChanged:nil];

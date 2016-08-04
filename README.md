@@ -12,6 +12,7 @@ AVPlayer module that implemented by subclass of UIView class
 ![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample2.png "demo")
 ![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample3.png "demo")
 ![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample4.png "demo")
+![alt text](https://github.com/skswhwo/AVPlayerView/blob/master/sample5.png "demo")
 
 ## Installation
 
@@ -31,16 +32,17 @@ $ pod install
 ## Usage
 
 ```objective-c
+AVPlayerView *avPlayerView  = [[AVPlayerView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
 NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
-[self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
-self.avPlayerView.autoplay      = YES;
-self.avPlayerView.loop          = YES;
-self.avPlayerView.dimmedEffect  = YES;
-self.pauseWhenDisappear         = YES;                  //default: true
-self.avPlayerView.showControl   = NO;                   //default: true
+[avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
+avPlayerView.autoplay           = YES;
+avPlayerView.loop               = YES;
+avPlayerView.dimmedEffect       = YES;
+avPlayerView.pauseWhenDisappear = YES;                  //default: true
+avPlayerView.showControl        = NO;                   //default: true
 self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 
-[self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
+[avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
     if (playerView.isFullSize) {
         [playerView normalSizeMode];
     } else {
