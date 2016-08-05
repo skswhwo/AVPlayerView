@@ -280,13 +280,14 @@
     if (orientation == UIDeviceOrientationPortrait) {
 
         [self addSubview:self.playerContentView toSuperView:superView edge:UIEdgeInsetsZero];
-
+        self.playerContentView.controlView.alpha = 0;
         [UIView animateWithDuration:0.3 animations:^{
 
             self.playerContentView.bounds = superView.bounds;
             self.playerContentView.transform = CGAffineTransformMakeRotation(0);
             
         } completion:^(BOOL finished) {
+            self.playerContentView.controlView.alpha = 1;
         }];
 
     } else if (orientation == UIDeviceOrientationLandscapeRight) {
@@ -294,13 +295,14 @@
         float margin = (superView.frame.size.height - superView.frame.size.width)/2;
         UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
         [self addSubview:self.playerContentView toSuperView:superView edge:edge];
-
+        self.playerContentView.controlView.alpha = 0;
         [UIView animateWithDuration:0.3 animations:^{
             
             self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
             self.playerContentView.transform = CGAffineTransformMakeRotation(-M_PI_2);
             
         } completion:^(BOOL finished) {
+            self.playerContentView.controlView.alpha = 1;
         }];
 
     } else if (orientation == UIDeviceOrientationLandscapeLeft) {
@@ -308,13 +310,14 @@
         float margin = (superView.frame.size.height - superView.frame.size.width)/2;
         UIEdgeInsets edge = UIEdgeInsetsMake(margin, -margin, -margin, margin);
         [self addSubview:self.playerContentView toSuperView:superView edge:edge];
-        
+        self.playerContentView.controlView.alpha = 0;
         [UIView animateWithDuration:0.3 animations:^{
             
             self.playerContentView.bounds = CGRectMake(0, 0, superView.frame.size.height, superView.frame.size.width);
             self.playerContentView.transform = CGAffineTransformMakeRotation(M_PI_2);
             
         } completion:^(BOOL finished) {
+            self.playerContentView.controlView.alpha = 1;
         }];
     }
 }
