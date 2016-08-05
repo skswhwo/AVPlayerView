@@ -114,6 +114,10 @@
 #pragma mark - Trigger
 - (void)playerWithContentURL:(NSURL *)url
 {
+    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    [[AVAudioSession sharedInstance] setActive:YES error:&error];
+
     AVPlayerItem *playerItem =[AVPlayerItem playerItemWithURL:url];
     [self.playerContentView playerWithPlayerItem:playerItem time:kCMTimeZero];
     
