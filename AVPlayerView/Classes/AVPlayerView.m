@@ -217,8 +217,10 @@
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.windowLevel = previousWindowLevel;
     [window layoutIfNeeded];
+    
     CGRect targetRect = [self.superview convertRect:self.frame toView:window];
     self.playerContentView.controlView.alpha = 0;
+    
     [UIView animateWithDuration:0.3 animations:^{
         
         self.playerContentView.frame = targetRect;
@@ -228,6 +230,7 @@
         self.playerContentView.transform = CGAffineTransformMakeRotation(0);
         
     } completion:^(BOOL finished) {
+        
         self.playerContentView.backgroundColor = [UIColor clearColor];
         self.playerContentView.controlView.alpha = 1;
         [self addSubview:self.playerContentView toSuperView:self edge:UIEdgeInsetsZero];
