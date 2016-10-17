@@ -7,11 +7,11 @@
 //
 
 #import "Test4ViewController.h"
-#import "AVPlayerView.h"
+#import "CrAVPlayerView.h"
 
 @interface Test4ViewController ()
 
-@property (weak, nonatomic) IBOutlet AVPlayerView *avPlayerView;
+@property (weak, nonatomic) IBOutlet CrAVPlayerView *avPlayerView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UISwitch *autoplaySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *loopSwitch;
@@ -34,15 +34,15 @@
     NSURL *url = [NSURL URLWithString:urlString];
     [self.avPlayerView playerWithContentURL:url];
     [self valueChanged:nil];
-    [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
+    [self.avPlayerView setTapCallBack:^(CrAVPlayerView *playerView) {
     }];
-    [self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidAppear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidDisappear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+    [self.avPlayerView setFailure:^(CrAVPlayerView *playerView) {
         //do somthing;
     }];
 }

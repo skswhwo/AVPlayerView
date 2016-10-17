@@ -6,11 +6,11 @@
 //  Copyright © 2016년 com.skswhwo. All rights reserved.
 //
 
-#import "AVPlayerView.h"
+#import "CrAVPlayerView.h"
 #import "AVPlayerContentView.h"
 #import "AVPlayerControlView.h"
 
-@interface AVPlayerView ()
+@interface CrAVPlayerView ()
 <AVPlayerContentViewDelegate>
 {
     BOOL didAppearFlag;
@@ -23,7 +23,7 @@
 @end
 
 
-@implementation AVPlayerView
+@implementation CrAVPlayerView
 - (void)initialize
 {
     [self initializeProperties];
@@ -207,13 +207,17 @@
 }
 - (void)playerViewFailed
 {
-    self.failure(self);
+    if (self.failure) {
+        self.failure(self);
+    }
 }
 - (void)playerViewCannotLoadThumbnail
 {
-    dispatch_once(&thumbnail_once, ^{
-        self.failure(self);
-    });
+    if (self.failure) {
+        dispatch_once(&thumbnail_once, ^{
+            self.failure(self);
+        });
+    }
 }
 #pragma mark - Action
 - (void)play

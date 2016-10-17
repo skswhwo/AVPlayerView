@@ -10,11 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import "AVPlayerViewEnum.h"
 
-@class AVPlayerView;
+@class CrAVPlayerView;
 
-typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
+typedef void (^CrAVPlayerViewCallback) (CrAVPlayerView *playerView);
 
-@interface AVPlayerView : UIView
+@interface CrAVPlayerView : UIView
 
 @property (nonatomic, assign) BOOL loop;
 @property (nonatomic, assign) BOOL autoplay;
@@ -25,15 +25,15 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 @property (nonatomic, strong) UIColor *backgroundColorForFullSize; //default: black
 @property (strong, nonatomic) NSURL *itemURL;
 
-@property (nonatomic, strong) AVPlayerViewCallback tapCallBack;
-@property (nonatomic, strong) AVPlayerViewCallback didAppear;
-@property (nonatomic, strong) AVPlayerViewCallback didDisappear;
-@property (nonatomic, strong) AVPlayerViewCallback failure;
+@property (nonatomic, strong) CrAVPlayerViewCallback tapCallBack;
+@property (nonatomic, strong) CrAVPlayerViewCallback didAppear;
+@property (nonatomic, strong) CrAVPlayerViewCallback didDisappear;
+@property (nonatomic, strong) CrAVPlayerViewCallback failure;
 
 - (void)playerWithContentURL:(NSURL *)url;
-- (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack;
-- (void)setDidAppear:(AVPlayerViewCallback)didAppear;
-- (void)setDidDisappear:(AVPlayerViewCallback)didDisappear;
+- (void)setTapCallBack:(CrAVPlayerViewCallback)tapCallBack;
+- (void)setDidAppear:(CrAVPlayerViewCallback)didAppear;
+- (void)setDidDisappear:(CrAVPlayerViewCallback)didDisappear;
 
 - (void)setGradientColorsAtBottom:(NSArray *)colors;
 

@@ -7,10 +7,10 @@
 //
 
 #import "Test2ViewController.h"
-#import "AVPlayerView.h"
+#import "CrAVPlayerView.h"
 
 @interface Test2ViewController ()
-@property (weak, nonatomic) IBOutlet AVPlayerView *avPlayerView;
+@property (weak, nonatomic) IBOutlet CrAVPlayerView *avPlayerView;
 
 @property (weak, nonatomic) IBOutlet UISwitch *autoplaySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *loopSwitch;
@@ -25,15 +25,15 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"land" ofType:@"mp4"];
     [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
     [self valueChanged:nil];
-    [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
+    [self.avPlayerView setTapCallBack:^(CrAVPlayerView *playerView) {
     }];
-    [self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidAppear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidDisappear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+    [self.avPlayerView setFailure:^(CrAVPlayerView *playerView) {
         //do somthing;
     }];
 }

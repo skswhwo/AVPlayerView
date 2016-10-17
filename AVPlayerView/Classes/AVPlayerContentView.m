@@ -89,9 +89,7 @@
 {
     if ([keyPath isEqualToString:@"status"]) {
         if (self.avPlayer.currentItem.status == AVPlayerStatusFailed) {
-            [self.avPlayer pause];
-            [self stateChanged:AVPlayerStatePause];
-            [self.delegate playerViewFailed];
+            [self playerFailed];
         }
     }
 }
@@ -146,6 +144,17 @@
     }
     [self.avPlayer play];
     [self stateChanged:AVPlayerStatePlay];
+    
+    if (self.avPlayer.status == AVPlayerStatusFailed) {
+        [self playerFailed];
+    }
+}
+
+- (void)playerFailed
+{
+    [self.avPlayer pause];
+    [self stateChanged:AVPlayerStatePause];
+    [self.delegate playerViewFailed];
 }
 
 - (void)pauseVideo

@@ -7,10 +7,10 @@
 //
 
 #import "Test1ViewController.h"
-#import "AVPlayerView.h"
+#import "CrAVPlayerView.h"
 
 @interface Test1ViewController ()
-@property (weak, nonatomic) IBOutlet AVPlayerView *avPlayerView;
+@property (weak, nonatomic) IBOutlet CrAVPlayerView *avPlayerView;
 
 @property (weak, nonatomic) IBOutlet UISwitch *autoplaySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *loopSwitch;
@@ -27,20 +27,20 @@
     [self.avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
     [self valueChanged:nil];
     self.avPlayerView.showControl = NO;
-    [self.avPlayerView setTapCallBack:^(AVPlayerView *playerView) {
+    [self.avPlayerView setTapCallBack:^(CrAVPlayerView *playerView) {
         if ([playerView isFullSize]) {
             [playerView normalSizeMode];
         } else {
             [playerView fullSizeMode];
         } ;
     }];
-    [self.avPlayerView setDidAppear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidAppear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
+    [self.avPlayerView setDidDisappear:^(CrAVPlayerView *playerView) {
         //do something;
     }];
-    [self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+    [self.avPlayerView setFailure:^(CrAVPlayerView *playerView) {
         //do somthing;
     }];
 }
