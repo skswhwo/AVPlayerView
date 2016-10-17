@@ -145,7 +145,7 @@
     [self.avPlayer play];
     [self stateChanged:AVPlayerStatePlay];
     
-    if (self.avPlayer.status == AVPlayerStatusFailed) {
+    if (self.avPlayer.currentItem.status == AVPlayerStatusFailed) {
         [self playerFailed];
     }
 }
