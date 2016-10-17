@@ -32,6 +32,10 @@ $ pod install
 ## Usage
 
 ```objective-c
+#import <AVPlayerView/CrAVPlayerView.h>
+```
+
+```objective-c
 AVPlayerView *avPlayerView  = [[AVPlayerView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
 NSString *path = [[NSBundle mainBundle] pathForResource:@"short" ofType:@"mp4"];
 [avPlayerView playerWithContentURL:[NSURL fileURLWithPath:path]];
