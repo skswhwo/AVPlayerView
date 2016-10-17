@@ -40,6 +40,9 @@
     [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
         //do something;
     }];
+    [self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+        //do somthing;
+    }];
 }
 
 - (IBAction)valueChanged:(id)sender
