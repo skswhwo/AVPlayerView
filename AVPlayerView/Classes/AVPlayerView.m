@@ -14,7 +14,7 @@
 <AVPlayerContentViewDelegate>
 {
     BOOL didAppearFlag;
-    
+    dispatch_once_t thumbnail_once;
     UIWindowLevel previousWindowLevel;
 }
 @property (strong, nonatomic) AVPlayerContentView *playerContentView;
@@ -112,20 +112,26 @@
 }
 
 #pragma mark - Trigger
-- (void)playerWithContentURL:(NSURL *)url
+#pragma mark - Trigger
+- (void)setItemURL:(NSURL *)itemURL
 {
+    _itemURL = itemURL;
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
     [[AVAudioSession sharedInstance] setActive:YES error:&error];
-
-    AVPlayerItem *playerItem =[AVPlayerItem playerItemWithURL:url];
+    
+    AVPlayerItem *playerItem =[AVPlayerItem playerItemWithURL:itemURL];
     [self.playerContentView playerWithPlayerItem:playerItem time:kCMTimeZero];
     
     if (self.autoplay) {
         [self.playerContentView playVideo];
-    } else if ([[url scheme] hasPrefix:@"http"]) {
+    } else if ([[itemURL scheme] hasPrefix:@"http"]) {
         [self.playerContentView stopVideo];
     }
+}
+- (void)playerWithContentURL:(NSURL *)url
+{
+    [self setItemURL:url];
 }
 
 #pragma mark - Setter
@@ -199,7 +205,16 @@
 {
     [self normalSizeMode];
 }
-
+- (void)playerViewFailed
+{
+    self.failure(self);
+}
+- (void)playerViewCannotLoadThumbnail
+{
+    dispatch_once(&thumbnail_once, ^{
+        self.failure(self);
+    });
+}
 #pragma mark - Action
 - (void)play
 {

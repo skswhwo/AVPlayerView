@@ -23,10 +23,12 @@ typedef void (^AVPlayerViewCallback) (AVPlayerView *playerView);
 @property (nonatomic, assign) BOOL pauseWhenDisappear;  //default: true
 
 @property (nonatomic, strong) UIColor *backgroundColorForFullSize; //default: black
+@property (strong, nonatomic) NSURL *itemURL;
 
 @property (nonatomic, strong) AVPlayerViewCallback tapCallBack;
 @property (nonatomic, strong) AVPlayerViewCallback didAppear;
 @property (nonatomic, strong) AVPlayerViewCallback didDisappear;
+@property (nonatomic, strong) AVPlayerViewCallback failure;
 
 - (void)playerWithContentURL:(NSURL *)url;
 - (void)setTapCallBack:(AVPlayerViewCallback)tapCallBack;

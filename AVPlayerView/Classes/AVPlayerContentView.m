@@ -23,6 +23,11 @@
     return [AVPlayerLayer class];
 }
 
+- (void)dealloc {
+    [self.playerItem removeObserver:self forKeyPath:@"status"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (id)init {
     self = [super init];
     [self initializer];
@@ -57,6 +62,8 @@
     [self.layer setPlayer:self.avPlayer];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerFinishedPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackStalledNotification:) name:AVPlayerItemPlaybackStalledNotification object:self.playerItem];
+    [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:NULL];
+
 
     __weak AVPlayerContentView *weakSelf = self;
     [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC)
@@ -78,6 +85,17 @@
 }
 
 #pragma mark - Observer
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"status"]) {
+        if (self.avPlayer.currentItem.status == AVPlayerStatusFailed) {
+            [self.avPlayer pause];
+            [self stateChanged:AVPlayerStatePause];
+            [self.delegate playerViewFailed];
+        }
+    }
+}
+
 - (void)playerFinishedPlaying:(NSNotification *)notification
 {
     isFinished = YES;
@@ -154,7 +172,11 @@
     CGImageRef imageRef = [imageGenerator copyCGImageAtTime:self.playerItem.currentTime actualTime:NULL error:NULL];
     UIImage *thumbnail = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
-    [self.thumbnailView setImage:thumbnail];
+    if (thumbnail) {
+        [self.thumbnailView setImage:thumbnail];
+    } else {
+        [self.delegate playerViewCannotLoadThumbnail];
+    }
 }
 
 #pragma mark - Callback

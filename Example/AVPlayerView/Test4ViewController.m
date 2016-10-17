@@ -27,7 +27,8 @@
     
 //    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test.mp4";  //small short
 //    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/400mb.mp4";   //large short
-    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test3.mp4";   //small long
+//    NSString *urlString = @"https://s3.ap-northeast-2.amazonaws.com/skswhwo-video/test3.mp4";   //small long
+    NSString *urlString = @"https://learningcard-files-stg.s3.amazonaws.com/uploads/videos/0d7de8c6-9718-478d-9b1c-118ef92a2d83/0d7de8c6-9718-478d-9b1c-118ef92a2d83-hls-600k.m3u8";        //HLS
     
 //    AVPlayerView *playerView  = [[AVPlayerView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
     NSURL *url = [NSURL URLWithString:urlString];

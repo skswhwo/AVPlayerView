@@ -53,5 +53,7 @@
 - (void)playerViewChangeToFullScreen;
 - (void)playerViewChangeToNormalScreen;
 - (void)playerViewClicked;
+- (void)playerViewFailed;
+- (void)playerViewCannotLoadThumbnail;
 
 @end
