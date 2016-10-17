@@ -58,6 +58,9 @@ self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
     //do somthing;
 }];
 
+[self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+        //do somthing;
+}];
 ```
 
 ```objective-c
@@ -76,7 +79,9 @@ self.backgroundColorForFullSize = [UIColor blackColor]; //default: black
 [self.avPlayerView setDidDisappear:^(AVPlayerView *playerView) {
     //do something;
 }];
-
+[self.avPlayerView setFailure:^(AVPlayerView *playerView) {
+        //do somthing;
+    }];
 ```
 
 ## Author
