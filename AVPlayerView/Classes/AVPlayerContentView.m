@@ -13,6 +13,8 @@
     BOOL playbackStalled;
     BOOL isFinished;
     NSInteger loopCount;
+    
+    NSInteger bufferCount;
 }
 @property (strong, nonatomic) AVPlayerItem *playerItem;
 @end
@@ -145,6 +147,20 @@
     [self.avPlayer play];
     [self stateChanged:AVPlayerStatePlay];
     
+    if (CMTimeGetSeconds(self.avPlayer.currentItem.currentTime) != 0) {
+        if ([self canPlayImmediately]) {
+            bufferCount = 0;
+        } else {
+            if (bufferCount == 3) {
+                bufferCount = 0;
+                [self playerFailed];
+            } else {
+                bufferCount++;
+                [self bufferingVideo];
+            }
+        }
+    }
+    
     if (self.avPlayer.currentItem.status == AVPlayerStatusFailed) {
         [self playerFailed];
     }
@@ -250,11 +266,7 @@
 {
     [self seekToTime:time];
     if (controlView.needToAutoPlay) {
-        if ([self canPlayImmediately]) {
-            [self playVideo];
-        } else {
-            [self bufferingVideo];
-        }
+        [self playVideo];
         [controlView reloadControlView];
     }
 }
