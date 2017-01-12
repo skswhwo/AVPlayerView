@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = 'AVPlayerView'
-  s.version          = '1.2.3'
+  s.version          = '1.2.4'
   s.platform         = :ios, '7.0'
   s.summary          = 'AVPlayer module that implemented by subclass of UIView class'
   s.homepage         = 'https://github.com/skswhwo/AVPlayerView'
