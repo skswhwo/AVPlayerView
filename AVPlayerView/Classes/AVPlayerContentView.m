@@ -192,16 +192,20 @@
 #pragma mark - Function
 - (void)addRemoteThumbnail
 {
-    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc]initWithAsset:self.playerItem.asset];
-    imageGenerator.appliesPreferredTrackTransform = YES;
-    CGImageRef imageRef = [imageGenerator copyCGImageAtTime:self.playerItem.currentTime actualTime:NULL error:NULL];
-    UIImage *thumbnail = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    if (thumbnail) {
-        [self.thumbnailView setImage:thumbnail];
-    } else {
-        [self.delegate playerViewCannotLoadThumbnail];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc]initWithAsset:self.playerItem.asset];
+        imageGenerator.appliesPreferredTrackTransform = YES;
+        CGImageRef imageRef = [imageGenerator copyCGImageAtTime:self.playerItem.currentTime actualTime:NULL error:NULL];
+        UIImage *thumbnail = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (thumbnail) {
+                [self.thumbnailView setImage:thumbnail];
+            } else {
+                [self.delegate playerViewCannotLoadThumbnail];
+            }
+        });
+    });
 }
 
 #pragma mark - Callback
